@@ -47,15 +47,12 @@ public class SymcorSPCusotmAuthenticator extends BasicAuthenticator{
 
     @Override
     public boolean canHandle(HttpServletRequest request) {
-        String userName = request.getParameter(BasicAuthenticatorConstants.USER_NAME);
-        String password = request.getParameter(BasicAuthenticatorConstants.PASSWORD);
         String SAMLResponse = request.getParameter(SSOConstants.HTTP_POST_PARAM_SAML2_RESP);
-        if (userName != null && password != null) {
+        if (SAMLResponse != null) {
             return true;
-        } else if (SAMLResponse != null) {
-            return true;
+        } else {
+            return super.canHandle(request);
         }
-        return false;
     }
 
     private void initCMSAuthEndpoint() throws AuthenticationFailedException {
@@ -99,12 +96,13 @@ public class SymcorSPCusotmAuthenticator extends BasicAuthenticator{
             localUserID = dao.getUsernameForNameID(nameID);
 
             if (localUserID == null) {
+                return null;
                 //TODO: prompting for credentials so we can link the nameId. Requirement is not clear in document
             } else {
                 context.setSubject(AuthenticatedUser.createLocalAuthenticatedUserFromSubjectIdentifier(localUserID));
                 return AuthenticatorFlowStatus.SUCCESS_COMPLETED;
             }
-        } else if (SAMLResponse == null && localUser == null) { //user register request from idp
+        } else { //user register request from idp or logout request
 
             if (!context.isLogoutRequest()) {
                 if (!canHandle(request)
@@ -174,7 +172,6 @@ public class SymcorSPCusotmAuthenticator extends BasicAuthenticator{
                 }
             }
         }
-        return null;
     }
 
     @Override

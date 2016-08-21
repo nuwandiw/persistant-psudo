@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1471710456160
+Bnd-LastModified: 1471793904317
 Build-Jdk: 1.7.0_51
 Built-By: nuwandi
 Bundle-Description: This is a Carbon bundle that represent the pplicatio
@@ -43,8 +43,8 @@ Import-Package: javax.servlet.http;version="[2.6.0,3.0.0)",org.apache.co
  rsion="[5.0.0,6.0.0)",org.wso2.carbon.identity.core.util;version="[5.0.
  0,6.0.0)",org.wso2.carbon.user.core.service;version="[4.4.0,5.0.0)",org
  .wso2.carbon.utils.multitenancy;version="[4.4.0,5.0.0)",org.wso2.carbon
- .identity.core.model;version="[5.0.0,6.0.0)",org.wso2.carbon.user.core;
- version="[4.4.0,5.0.0)",org.wso2.carbon.identity.base;version="[5.0.0,6
+ .identity.core.model;version="[5.0.0,6.0.0)",org.wso2.carbon.identity.b
+ ase;version="[5.0.0,6.0.0)",org.wso2.carbon.user.core;version="[4.4.0,5
  .0.0)",org.wso2.carbon.user.api;version="[1.0.1,2.0.0)",org.wso2.carbon
  .user.core.util;version="[4.4.0,5.0.0)"
 Service-Component: OSGI-INF/serviceComponents.xml
