@@ -10,7 +10,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.carbon.identity.application.authentication.framework.AuthenticatorFlowStatus;
 import org.wso2.carbon.identity.application.authentication.framework.LocalApplicationAuthenticator;
@@ -208,9 +207,9 @@ public class SymcorSPCusotmAuthenticator extends BasicAuthenticator{
                 response.sendRedirect(ssoUrl);
 
             } catch (SAMLSSOException e) {
-                throw new AuthenticationFailedException(e.getMessage());
+                throw new AuthenticationFailedException("Error while building SAML Request");
             } catch (IOException e) {
-                throw new AuthenticationFailedException(e.getMessage());
+                throw new AuthenticationFailedException("Error while redirecting to " + ssoUrl);
             }
 
         } else {
@@ -298,16 +297,12 @@ public class SymcorSPCusotmAuthenticator extends BasicAuthenticator{
                 isAuthenticated = true;
             }
 
-        } catch (UnsupportedEncodingException e) {
-            throw new AuthenticationFailedException(e.getMessage());
         }
-//        catch (ClientProtocolException e) {
-//            throw new AuthenticationFailedException(e.getMessage());
-//        }
+        catch (UnsupportedEncodingException e) {
+            throw new AuthenticationFailedException("Error while URL Encoding the post parameters");
+        }
         catch (IOException e) {
-            throw new AuthenticationFailedException(e.getMessage());
-        } catch (JSONException e) {
-            throw new AuthenticationFailedException(e.getMessage());
+            throw new AuthenticationFailedException("Error while executing HTTP Post");
         }
 
         return isAuthenticated;
@@ -341,10 +336,10 @@ public class SymcorSPCusotmAuthenticator extends BasicAuthenticator{
             saml2SSOManager.processResponse(request);
             subject = (String) request.getSession().getAttribute("username"); //nameID is set as username
             if (subject == null) {
-                throw new SAMLSSOException("Cannot find name ID in the SAMLResponse");
+                throw new AuthenticationFailedException("Cannot find name ID in the SAMLResponse");
             }
         } catch (SAMLSSOException e) {
-            throw new AuthenticationFailedException(e.getMessage());
+            throw new AuthenticationFailedException("Error while initiating SAML2SSOManager");
         }
         return  subject;
     }
