@@ -6,14 +6,15 @@
     <parent>
         <groupId>org.wso2.carbon.identity</groupId>
         <artifactId>application-authenticators</artifactId>
-        <version>5.0.8-SNAPSHOT</version>
-        <relativePath>../../../../Offsite/src/carbon-identity/components/application-authenticators/pom.xml</relativePath>
+        <version>5.0.7</version>
+        <relativePath>../../../../Offsite/src/support/carbon-identity-1/components/application-authenticators/pom.xml</relativePath>
     </parent>
 
     <groupId>org.wso2.carbon.identity</groupId>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>custom.wso2.carbon.identity.application.authenticator.persistantId</artifactId>
     <packaging>bundle</packaging>
+    <!--<version>5.0.7</version>-->
 
     <dependencies>
         <dependency>
@@ -81,6 +82,7 @@
                         <Private-Package>
                             custom.wso2.carbon.identity.application.authenticator.persistantId.internal
                         </Private-Package>
+                        <!--<DynamicImport-Package>*</DynamicImport-Package>-->
                         <Import-Package>
                             javax.servlet.http; version="${imp.pkg.version.javax.servlet}",
 

@@ -10,6 +10,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.carbon.identity.application.authentication.framework.AuthenticatorFlowStatus;
 import org.wso2.carbon.identity.application.authentication.framework.LocalApplicationAuthenticator;
@@ -276,6 +277,7 @@ public class SymcorSPCusotmAuthenticator extends BasicAuthenticator{
         List<NameValuePair> parameters = new ArrayList<NameValuePair>();
         parameters.add(new BasicNameValuePair(SymcorAuthenticatorConstants.CMSAuthenticator.USER_ID, username));
         parameters.add(new BasicNameValuePair(SymcorAuthenticatorConstants.CMSAuthenticator.PASSWORD, password));
+
         try {
             post.setHeader(SymcorAuthenticatorConstants.CMSAuthenticator.ACCEPT_HEADER,
                     SymcorAuthenticatorConstants.CMSAuthenticator.HEADER_JSON);
@@ -297,34 +299,20 @@ public class SymcorSPCusotmAuthenticator extends BasicAuthenticator{
                 isAuthenticated = true;
             }
 
+        } catch (UnsupportedEncodingException e) {
+            throw new AuthenticationFailedException(e.getMessage());
         }
-        catch (UnsupportedEncodingException e) {
-            throw new AuthenticationFailedException("Error while URL Encoding the post parameters");
-        }
+//        catch (ClientProtocolException e) {
+//            throw new AuthenticationFailedException(e.getMessage());
+//        }
         catch (IOException e) {
-            throw new AuthenticationFailedException("Error while executing HTTP Post");
+            throw new AuthenticationFailedException(e.getMessage());
+        } catch (JSONException e) {
+            throw new AuthenticationFailedException(e.getMessage());
         }
 
         return isAuthenticated;
     }
-
-//    private void processSAMLResponse(HttpServletRequest request,
-//                                     HttpServletResponse response, AuthenticationContext context) {
-//
-//
-//        try {
-//            String subject = getNameIDFromSAML(request, context);
-//
-//            //SymcorSPAuthenticatorDAO dao = new SymcorSPAuthenticatorDAO();
-//
-//            if (subject == null) {
-//                throw new SAMLSSOException("Cannot find name ID in the SAMLResponse");
-//            }
-//        } catch (SAMLSSOException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
 
     private String getNameIDFromSAML (HttpServletRequest request, AuthenticationContext context)
             throws AuthenticationFailedException {
