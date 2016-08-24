@@ -37,9 +37,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class SymcorSPCusotmAuthenticator extends BasicAuthenticator{
+public class SymcorSPCustomAuthenticator extends BasicAuthenticator{
 
-    private static final Log log = LogFactory.getLog(SymcorSPCusotmAuthenticator.class);
+    private static final Log log = LogFactory.getLog(SymcorSPCustomAuthenticator.class);
     private String cmsAuthEndpoint;
     private String IdpUrl;
 
@@ -153,7 +153,6 @@ public class SymcorSPCusotmAuthenticator extends BasicAuthenticator{
                 saml2SSOManager.init(context.getTenantDomain(), getAuthenticatorConfig().getParameterMap(),
                         context.getExternalIdP().getIdentityProvider());
                 ssoUrl = saml2SSOManager.buildRequest(request, false, false, idp, context);
-                request.setAttribute("sendSAMLRequest", true);
                 context.setSubject(AuthenticatedUser.createLocalAuthenticatedUserFromSubjectIdentifier(username));
                 response.sendRedirect(ssoUrl);
 

@@ -1,6 +1,6 @@
 package custom.wso2.carbon.identity.application.authenticator.persistantId.internal;
 
-import custom.wso2.carbon.identity.application.authenticator.persistantId.SymcorSPCusotmAuthenticator;
+import custom.wso2.carbon.identity.application.authenticator.persistantId.SymcorSPCustomAuthenticator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.service.component.ComponentContext;
@@ -29,7 +29,7 @@ public class SymcorSPCustomAuthenticatoServiceComponent {
 
     protected void activate(ComponentContext ctxt) {
         try {
-            SymcorSPCusotmAuthenticator symcorAuth = new SymcorSPCusotmAuthenticator();
+            SymcorSPCustomAuthenticator symcorAuth = new SymcorSPCustomAuthenticator();
             ctxt.getBundleContext().registerService(ApplicationAuthenticator.class.getName(), symcorAuth, null);
             if (log.isDebugEnabled()) {
                 log.info("Symcor Authenticator bundle is activated");
