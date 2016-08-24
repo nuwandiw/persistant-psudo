@@ -13,16 +13,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.carbon.identity.application.authentication.framework.AuthenticatorFlowStatus;
-import org.wso2.carbon.identity.application.authentication.framework.LocalApplicationAuthenticator;
 import org.wso2.carbon.identity.application.authentication.framework.config.builder.FileBasedConfigurationBuilder;
 import org.wso2.carbon.identity.application.authentication.framework.config.model.AuthenticatorConfig;
-import org.wso2.carbon.identity.application.authentication.framework.config.model.StepConfig;
 import org.wso2.carbon.identity.application.authentication.framework.context.AuthenticationContext;
 import org.wso2.carbon.identity.application.authentication.framework.exception.AuthenticationFailedException;
 import org.wso2.carbon.identity.application.authentication.framework.exception.InvalidCredentialsException;
 import org.wso2.carbon.identity.application.authentication.framework.exception.LogoutFailedException;
 import org.wso2.carbon.identity.application.authentication.framework.model.AuthenticatedUser;
-import org.wso2.carbon.identity.application.authentication.framework.util.FrameworkConstants;
 import org.wso2.carbon.identity.application.authenticator.basicauth.BasicAuthenticator;
 import org.wso2.carbon.identity.application.authenticator.basicauth.BasicAuthenticatorConstants;
 import org.wso2.carbon.identity.application.authenticator.samlsso.exception.SAMLSSOException;
@@ -34,10 +31,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class SymcorSPCusotmAuthenticator extends BasicAuthenticator{
 
@@ -82,95 +80,43 @@ public class SymcorSPCusotmAuthenticator extends BasicAuthenticator{
         String localUserID;
         SymcorSPAuthenticatorDAO dao;
 
-        if (SAMLResponse != null && localUser != null) { //samlresponse for previously locally authenticated user
-            String nameID = getNameIDFromSAML(request, context);
-            localUserID = localUser.getUserName();
+        if (canHandle(request)) {
+            if (SAMLResponse != null) {
 
-            dao = new SymcorSPAuthenticatorDAO();
-            dao.linkNameIDToUser(localUserID, nameID);
-            return AuthenticatorFlowStatus.SUCCESS_COMPLETED;
+                String nameID = getNameIDFromSAML(request, context);
+                dao = new SymcorSPAuthenticatorDAO();
 
-        } else if (SAMLResponse != null && localUser == null) { //samlresponse for idp authenticated user
-            String nameID = getNameIDFromSAML(request, context);
-            dao = new SymcorSPAuthenticatorDAO();
-            localUserID = dao.getUsernameForNameID(nameID);
-
-            if (localUserID == null) {
-                return null;
-                //TODO: prompting for credentials so we can link the nameId. Requirement is not clear in document
-            } else {
-                context.setSubject(AuthenticatedUser.createLocalAuthenticatedUserFromSubjectIdentifier(localUserID));
-                return AuthenticatorFlowStatus.SUCCESS_COMPLETED;
-            }
-        } else { //user register request from idp or logout request
-
-            if (!context.isLogoutRequest()) {
-                if (!canHandle(request)
-                        || (request.getAttribute(FrameworkConstants.REQ_ATTR_HANDLED) != null && ((Boolean) request
-                        .getAttribute(FrameworkConstants.REQ_ATTR_HANDLED)))) {
-                    initiateAuthenticationRequest(request, response, context);
-                    context.setCurrentAuthenticator(getName());
-                    return AuthenticatorFlowStatus.INCOMPLETE;
-                } else {
+                if (localUser != null) { //previously locally authenticated user
+                    localUserID = localUser.getUserName();
                     try {
-                        processAuthenticationResponse(request, response, context);
-                        if (this instanceof LocalApplicationAuthenticator) {
-                            if (!context.getSequenceConfig().getApplicationConfig().isSaaSApp()) {
-
-                                if ((Boolean) request.getAttribute("sendSAMLRequest")) {
-                                    return AuthenticatorFlowStatus.INCOMPLETE;
-                                }
-                                String userDomain = context.getSubject().getTenantDomain();
-                                String tenantDomain = context.getTenantDomain();
-                                if (!StringUtils.equals(userDomain, tenantDomain)) {
-                                    context.setProperty("UserTenantDomainMismatch", true);
-                                    throw new AuthenticationFailedException("Service Provider tenant domain must be " +
-                                            "equal to user tenant domain for non-SaaS applications");
-                                }
-                            }
-                        }
-                        request.setAttribute(FrameworkConstants.REQ_ATTR_HANDLED, true);
-                        return AuthenticatorFlowStatus.SUCCESS_COMPLETED;
-                    } catch (AuthenticationFailedException e) {
-                        Map<Integer, StepConfig> stepMap = context.getSequenceConfig().getStepMap();
-                        boolean stepHasMultiOption = false;
-
-                        if (stepMap != null && !stepMap.isEmpty()) {
-                            StepConfig stepConfig = stepMap.get(context.getCurrentStep());
-
-                            if (stepConfig != null) {
-                                stepHasMultiOption = stepConfig.isMultiOption();
-                            }
-                        }
-
-                        if (retryAuthenticationEnabled() && !stepHasMultiOption) {
-                            context.setRetrying(true);
-                            context.setCurrentAuthenticator(getName());
-                            initiateAuthenticationRequest(request, response, context);
-                            return AuthenticatorFlowStatus.INCOMPLETE;
-                        } else {
-                            throw e;
-                        }
-                    }
-                }
-                // if a logout flow
-            } else {
-                try {
-                    if (!canHandle(request)) {
-                        context.setCurrentAuthenticator(getName());
-                        initiateLogoutRequest(request, response, context);
-                        return AuthenticatorFlowStatus.INCOMPLETE;
-                    } else {
-                        processLogoutResponse(request, response, context);
-                        return AuthenticatorFlowStatus.SUCCESS_COMPLETED;
-                    }
-                } catch (UnsupportedOperationException e) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("Ignoring UnsupportedOperationException.", e);
+                        dao.linkNameIDToUser(localUserID, nameID);
+                    } catch (SQLException e) {
+                        throw new AuthenticationFailedException(e.getMessage());
                     }
                     return AuthenticatorFlowStatus.SUCCESS_COMPLETED;
+
+                } else { //saml response for idp authenticated user
+
+                    try {
+                        localUserID = dao.getUsernameForNameID(nameID);
+                    } catch (SQLException e) {
+                        throw new AuthenticationFailedException(e.getMessage());
+                    }
+
+                    if (localUserID == null) {
+                        return null;
+                        //TODO: prompting for credentials so we can link the nameId. Requirement is not clear in document
+                    } else {
+                        context.setSubject(AuthenticatedUser.createLocalAuthenticatedUserFromSubjectIdentifier(localUserID));
+                        return AuthenticatorFlowStatus.SUCCESS_COMPLETED;
+                    }
                 }
+            } else { //request with username/password
+                processAuthenticationResponse(request, response, context);
+                return AuthenticatorFlowStatus.INCOMPLETE;
             }
+        }else {
+            return super.process(request, response, context);
         }
     }
 
@@ -186,13 +132,17 @@ public class SymcorSPCusotmAuthenticator extends BasicAuthenticator{
         boolean isAuthenticated = false;
 
         SymcorSPAuthenticatorDAO dao = new SymcorSPAuthenticatorDAO();
-        platformInfo = dao.getPlatformInfo(username);
+        try {
+            platformInfo = dao.getPlatformInfo(username);
+        } catch (SQLException e) {
+            throw new AuthenticationFailedException(e.getMessage());
+        }
 
         if (SymcorAuthenticatorConstants.PLATFORM_INFO_WLBX == platformInfo) {
             //TODO:Authenticate against SSO_SP_USER
         } else if (SymcorAuthenticatorConstants.PLATFORM_INFO_BOTH == platformInfo ||
                 SymcorAuthenticatorConstants.PLATFORM_INFO_CMS == platformInfo) {
-            isAuthenticated = AuthenticatedFromCMS(username, password);
+            isAuthenticated = isAuthenticatedFromCMS(username, password);
         }
 
         if (isAuthenticated) {
@@ -266,7 +216,7 @@ public class SymcorSPCusotmAuthenticator extends BasicAuthenticator{
         }
     }
 
-    private boolean AuthenticatedFromCMS (String username, String password)
+    private boolean isAuthenticatedFromCMS(String username, String password)
             throws AuthenticationFailedException {
 
         boolean isAuthenticated = false;
@@ -332,14 +282,25 @@ public class SymcorSPCusotmAuthenticator extends BasicAuthenticator{
         return  subject;
     }
 
-    @Override
-    protected boolean retryAuthenticationEnabled() {
-        return true;
-    }
 
     @Override
     public String getContextIdentifier(HttpServletRequest request) {
-        return request.getParameter("sessionDataKey");
+
+        String identifier = request.getParameter("sessionDataKey");
+
+        if (identifier == null) {
+            identifier = request.getParameter("RelayState");
+
+            if (identifier != null) {
+                try {
+                    return URLDecoder.decode(identifier, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    log.error("Exception while URL decoding the Relay State", e);
+                }
+            }
+        }
+
+        return identifier;
     }
 
     @Override

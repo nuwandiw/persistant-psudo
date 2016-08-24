@@ -12,7 +12,7 @@ import java.sql.SQLException;
  */
 public class SymcorSPAuthenticatorDAO {
 
-    public int getPlatformInfo(String username) {
+    public int getPlatformInfo(String userName) throws SQLException {
 
         Connection connection = IdentityDatabaseUtil.getDBConnection();
         PreparedStatement prepStmt = null;
@@ -21,21 +21,21 @@ public class SymcorSPAuthenticatorDAO {
 
         try {
             prepStmt = connection.prepareStatement(SQLQueries.GET_PLATFORM_INFO);
-            prepStmt.setString(1, username);
+            prepStmt.setString(1, userName);
             resultSet = prepStmt.executeQuery();
 
             if (resultSet.next()) {
                 platformInfo = resultSet.getInt(1);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new SQLException("Error while reading platform info for user : " + userName);
         } finally {
             IdentityDatabaseUtil.closeAllConnections(connection, null, prepStmt);
         }
         return platformInfo;
     }
 
-    public String getUsernameForNameID(String nameID) {
+    public String getUsernameForNameID(String nameID) throws SQLException {
 
         Connection connection = IdentityDatabaseUtil.getDBConnection();
         PreparedStatement prepStmt = null;
@@ -51,7 +51,7 @@ public class SymcorSPAuthenticatorDAO {
                 userName = resultSet.getString(1);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new SQLException("Failed reading username for NameID : " + nameID);
         }finally {
             IdentityDatabaseUtil.closeAllConnections(connection, null, prepStmt);
         }
@@ -59,7 +59,7 @@ public class SymcorSPAuthenticatorDAO {
         return userName;
     }
 
-    public void linkNameIDToUser (String userName, String nameID) {
+    public void linkNameIDToUser (String userName, String nameID) throws SQLException {
 
         Connection connection = IdentityDatabaseUtil.getDBConnection();
         PreparedStatement prepStmt = null;
@@ -71,7 +71,7 @@ public class SymcorSPAuthenticatorDAO {
             prepStmt.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new SQLException("Failed to update database with NameID : " + nameID + " for user : " + userName);
         } finally {
             IdentityDatabaseUtil.closeAllConnections(connection, null, prepStmt);
         }
