@@ -20,12 +20,17 @@ import org.wso2.carbon.identity.application.authentication.framework.exception.A
 import org.wso2.carbon.identity.application.authentication.framework.exception.InvalidCredentialsException;
 import org.wso2.carbon.identity.application.authentication.framework.exception.LogoutFailedException;
 import org.wso2.carbon.identity.application.authentication.framework.model.AuthenticatedUser;
+import org.wso2.carbon.identity.application.authentication.framework.util.FrameworkUtils;
 import org.wso2.carbon.identity.application.authenticator.basicauth.BasicAuthenticator;
 import org.wso2.carbon.identity.application.authenticator.basicauth.BasicAuthenticatorConstants;
 import org.wso2.carbon.identity.application.authenticator.samlsso.exception.SAMLSSOException;
 import org.wso2.carbon.identity.application.authenticator.samlsso.manager.DefaultSAML2SSOManager;
 import org.wso2.carbon.identity.application.authenticator.samlsso.manager.SAML2SSOManager;
 import org.wso2.carbon.identity.application.authenticator.samlsso.util.SSOConstants;
+import org.wso2.carbon.identity.application.common.model.IdentityProvider;
+import org.wso2.carbon.identity.application.common.model.Property;
+import org.wso2.carbon.idp.mgt.IdentityProviderManagementException;
+import org.wso2.carbon.idp.mgt.IdentityProviderManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,6 +41,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SymcorSPCustomAuthenticator extends BasicAuthenticator{
 
@@ -82,34 +88,28 @@ public class SymcorSPCustomAuthenticator extends BasicAuthenticator{
 
         if (canHandle(request)) {
             if (SAMLResponse != null) {
-
+                Map<String, String> claims = new HashMap<>();
                 String nameID = getNameIDFromSAML(request, context);
                 dao = new SymcorSPAuthenticatorDAO();
 
-                if (localUser != null) { //previously locally authenticated user
-                    localUserID = localUser.getUserName();
-                    try {
+                try {
+                    if (localUser != null) { //previously locally authenticated user
+                        localUserID = localUser.getUserName();
                         dao.linkNameIDToUser(localUserID, nameID);
-                    } catch (SQLException e) {
-                        throw new AuthenticationFailedException(e.getMessage());
-                    }
-                    return AuthenticatorFlowStatus.SUCCESS_COMPLETED;
-
-                } else { //saml response for idp authenticated user
-
-                    try {
+                    } else { //saml response for idp authenticated user
                         localUserID = dao.getUsernameForNameID(nameID);
-                    } catch (SQLException e) {
-                        throw new AuthenticationFailedException(e.getMessage());
+                        if (localUserID == null) {
+                            throw new AuthenticationFailedException("No record in SP DB for the NameID : " + nameID);
+                        }
                     }
-
-                    if (localUserID == null) {
-                        return null;
-                        //TODO: prompting for credentials so we can link the nameId. Requirement is not clear in document
-                    } else {
-                        context.setSubject(AuthenticatedUser.createLocalAuthenticatedUserFromSubjectIdentifier(localUserID));
-                        return AuthenticatorFlowStatus.SUCCESS_COMPLETED;
-                    }
+                    claims.put(SymcorAuthenticatorConstants.PLATFORM_INFO_CLAIM,
+                            String.valueOf(dao.getPlatformInfo(localUserID)));
+                    claims.put(SymcorAuthenticatorConstants.LANGUAGE_CLAIM,
+                            request.getParameter(SymcorAuthenticatorConstants.LANGUAGE));
+                    updateContextWithLocalUser(context, localUserID, claims);
+                    return AuthenticatorFlowStatus.SUCCESS_COMPLETED;
+                } catch (SQLException e) {
+                    throw new AuthenticationFailedException(e.getMessage());
                 }
             } else { //request with username/password
                 processAuthenticationResponse(request, response, context);
@@ -147,12 +147,13 @@ public class SymcorSPCustomAuthenticator extends BasicAuthenticator{
 
         if (isAuthenticated) {
             String ssoUrl = "";
-            String idp = getIDPUrl();
+            IdentityProvider idp = getAuthenticatorFederatedIdp(context);
+
             try {
                 SAML2SSOManager saml2SSOManager = getSAML2SSOManagerInstance();
                 saml2SSOManager.init(context.getTenantDomain(), getAuthenticatorConfig().getParameterMap(),
-                        context.getExternalIdP().getIdentityProvider());
-                ssoUrl = saml2SSOManager.buildRequest(request, false, false, idp, context);
+                        idp);
+                ssoUrl = saml2SSOManager.buildRequest(request, false, false, getAuthenticatorFederatedUrl(idp), context);
                 context.setSubject(AuthenticatedUser.createLocalAuthenticatedUserFromSubjectIdentifier(username));
                 response.sendRedirect(ssoUrl);
 
@@ -161,7 +162,6 @@ public class SymcorSPCustomAuthenticator extends BasicAuthenticator{
             } catch (IOException e) {
                 throw new AuthenticationFailedException("Error while redirecting to " + ssoUrl);
             }
-
         } else {
             if (log.isDebugEnabled()) {
                 log.debug("User authentication failed due to invalid credentials");
@@ -269,7 +269,7 @@ public class SymcorSPCustomAuthenticator extends BasicAuthenticator{
         try {
             SAML2SSOManager saml2SSOManager = getSAML2SSOManagerInstance();
             saml2SSOManager.init(context.getTenantDomain(), getAuthenticatorConfig().getParameterMap(),
-                    context.getExternalIdP().getIdentityProvider());
+                    getAuthenticatorFederatedIdp(context));
             saml2SSOManager.processResponse(request);
             subject = (String) request.getSession().getAttribute("username"); //nameID is set as username
             if (subject == null) {
@@ -300,6 +300,43 @@ public class SymcorSPCustomAuthenticator extends BasicAuthenticator{
         }
 
         return identifier;
+    }
+
+    private IdentityProvider getAuthenticatorFederatedIdp(AuthenticationContext context)
+            throws AuthenticationFailedException {
+
+        String idp = getIDPUrl();
+        IdentityProvider identityProvider;
+        try {
+            identityProvider = IdentityProviderManager.getInstance().getIdPByName(idp, context.getTenantDomain());
+
+        } catch (IdentityProviderManagementException e) {
+            throw new AuthenticationFailedException("Error while getting federated Idp for name : " + idp);
+        }
+        return identityProvider;
+    }
+
+    private String getAuthenticatorFederatedUrl(IdentityProvider identityProvider)
+            throws AuthenticationFailedException {
+        String ssoUrl = null;
+        Property[] props = identityProvider.getDefaultAuthenticatorConfig().getProperties();
+
+        for (Property idpProperty : props) {
+            if("SSOUrl".equals(idpProperty.getName())) {
+                ssoUrl = idpProperty.getValue();
+            }
+        }
+
+        if (ssoUrl == null) {
+            throw new AuthenticationFailedException("No sso url found in the Idp");
+        }
+        return ssoUrl;
+    }
+
+    private void updateContextWithLocalUser(AuthenticationContext context, String userName, Map<String, String> claims) {
+        AuthenticatedUser user = AuthenticatedUser.createLocalAuthenticatedUserFromSubjectIdentifier(userName);
+        user.setUserAttributes(FrameworkUtils.buildClaimMappings(claims));
+        context.setSubject(user);
     }
 
     @Override

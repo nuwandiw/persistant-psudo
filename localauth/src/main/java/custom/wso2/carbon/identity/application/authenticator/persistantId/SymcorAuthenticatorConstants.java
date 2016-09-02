@@ -13,6 +13,11 @@ public class SymcorAuthenticatorConstants {
     public static final int PLATFORM_INFO_CMS = 0;
     public static final int PLATFORM_INFO_BOTH = 2;
 
+    public static final String PLATFORM_INFO_CLAIM = "http://wso2.org/claims/platformInfo";
+    public static final String LANGUAGE_CLAIM = "http://wso2.org/claims/locality";
+
+    public static final String LANGUAGE = "language";
+
     public class CMSAuthenticator {
         public static final String USER_ID = "userID";
         public static final String PASSWORD = "password";
