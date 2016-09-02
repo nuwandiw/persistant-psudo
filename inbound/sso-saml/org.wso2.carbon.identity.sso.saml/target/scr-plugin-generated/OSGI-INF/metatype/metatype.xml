@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0" localization="OSGI-INF/metatype/metatype">
+    <OCD id="identity.sso.saml.component" name="%identity.sso.saml.component.name" description="%identity.sso.saml.component.description"/>
+    <Designate pid="identity.sso.saml.component">
+        <Object ocdref="identity.sso.saml.component"/>
+    </Designate>
+</metatype:MetaData>
