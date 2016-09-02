@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="EntryPointsManager">
+    <entry_points version="2.0" />
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/../persistant-psudo/inbound/sso-saml/pom.xml" />
+        <option value="$PROJECT_DIR$/../../../src/support/carbon-identity-1/pom.xml" />
+        <option value="$PROJECT_DIR$/../../../src/fmr-inbound-authenticator_wso2is_510/fmr-is-dpiam-is-json-inbound-authenticator/pom.xml" />
+        <option value="$PROJECT_DIR$/custom.wso2.carbon.identity.inbound/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="1.7" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+  <component name="SuppressionsComponent">
+    <option name="suppComments" value="[]" />
+  </component>
+</project>
+

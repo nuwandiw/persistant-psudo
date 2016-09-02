@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <option name="DEFAULT_COMPILER" value="Javac" />
+    <resourceExtensions />
+    <wildcardResourcePatterns>
+      <entry name="!?*.java" />
+      <entry name="!?*.form" />
+      <entry name="!?*.class" />
+      <entry name="!?*.groovy" />
+      <entry name="!?*.scala" />
+      <entry name="!?*.flex" />
+      <entry name="!?*.kt" />
+      <entry name="!?*.clj" />
+    </wildcardResourcePatterns>
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="false">
+        <processorPath useClasspath="true" />
+      </profile>
+      <profile default="false" name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="custom.wso2.carbon.identity.application.authenticator.persistantId" />
+        <module name="custom.wso2.carbon.identity.inbound" />
+        <module name="fmr-dp-iam-is-json-inbound-authenticator" />
+        <module name="org.wso2.carbon.claim.mgt" />
+        <module name="org.wso2.carbon.claim.mgt.stub" />
+        <module name="org.wso2.carbon.claim.mgt.ui" />
+        <module name="org.wso2.carbon.directory.server.manager" />
+        <module name="org.wso2.carbon.directory.server.manager.common" />
+        <module name="org.wso2.carbon.directory.server.manager.stub" />
+        <module name="org.wso2.carbon.directory.server.manager.ui" />
+        <module name="org.wso2.carbon.identity.application.authentication.endpoint" />
+        <module name="org.wso2.carbon.identity.application.authentication.endpoint.util" />
+        <module name="org.wso2.carbon.identity.application.authentication.framework" />
+        <module name="org.wso2.carbon.identity.application.authenticator.basicauth" />
+        <module name="org.wso2.carbon.identity.application.authenticator.fido" />
+        <module name="org.wso2.carbon.identity.application.authenticator.iwa" />
+        <module name="org.wso2.carbon.identity.application.authenticator.oidc" />
+        <module name="org.wso2.carbon.identity.application.authenticator.openid" />
+        <module name="org.wso2.carbon.identity.application.authenticator.passive.sts" />
+        <module name="org.wso2.carbon.identity.application.authenticator.requestpath.basicauth" />
+        <module name="org.wso2.carbon.identity.application.authenticator.requestpath.oauth" />
+        <module name="org.wso2.carbon.identity.application.authenticator.samlsso" />
+        <module name="org.wso2.carbon.identity.application.authenticator.social" />
+        <module name="org.wso2.carbon.identity.application.common" />
+        <module name="org.wso2.carbon.identity.application.mgt" />
+        <module name="org.wso2.carbon.identity.application.mgt.stub" />
+        <module name="org.wso2.carbon.identity.application.mgt.ui" />
+        <module name="org.wso2.carbon.identity.authenticator.iwa" />
+        <module name="org.wso2.carbon.identity.authenticator.iwa.stub" />
+        <module name="org.wso2.carbon.identity.authenticator.iwa.ui" />
+        <module name="org.wso2.carbon.identity.authenticator.mutualssl" />
+        <module name="org.wso2.carbon.identity.authenticator.saml2.sso" />
+        <module name="org.wso2.carbon.identity.authenticator.saml2.sso.common" />
+        <module name="org.wso2.carbon.identity.authenticator.saml2.sso.stub" />
+        <module name="org.wso2.carbon.identity.authenticator.saml2.sso.ui" />
+        <module name="org.wso2.carbon.identity.authenticator.signedjwt" />
+        <module name="org.wso2.carbon.identity.authenticator.thrift" />
+        <module name="org.wso2.carbon.identity.authenticator.token.stub" />
+        <module name="org.wso2.carbon.identity.authenticator.webseal.stub" />
+        <module name="org.wso2.carbon.identity.base" />
+        <module name="org.wso2.carbon.identity.core" />
+        <module name="org.wso2.carbon.identity.core.ui" />
+        <module name="org.wso2.carbon.identity.entitlement" />
+        <module name="org.wso2.carbon.identity.entitlement.common" />
+        <module name="org.wso2.carbon.identity.entitlement.filter" />
+        <module name="org.wso2.carbon.identity.entitlement.proxy" />
+        <module name="org.wso2.carbon.identity.entitlement.stub" />
+        <module name="org.wso2.carbon.identity.entitlement.ui" />
+        <module name="org.wso2.carbon.identity.mgt" />
+        <module name="org.wso2.carbon.identity.mgt.stub" />
+        <module name="org.wso2.carbon.identity.mgt.ui" />
+        <module name="org.wso2.carbon.identity.notification.mgt" />
+        <module name="org.wso2.carbon.identity.notification.mgt.email" />
+        <module name="org.wso2.carbon.identity.notification.mgt.json" />
+        <module name="org.wso2.carbon.identity.oauth" />
+        <module name="org.wso2.carbon.identity.oauth.common" />
+        <module name="org.wso2.carbon.identity.oauth.endpoint" />
+        <module name="org.wso2.carbon.identity.oauth.stub" />
+        <module name="org.wso2.carbon.identity.oauth.ui" />
+        <module name="org.wso2.carbon.identity.provider" />
+        <module name="org.wso2.carbon.identity.provider.openid.stub" />
+        <module name="org.wso2.carbon.identity.provider.stub" />
+        <module name="org.wso2.carbon.identity.provisioning" />
+        <module name="org.wso2.carbon.identity.provisioning.connector.google" />
+        <module name="org.wso2.carbon.identity.provisioning.connector.salesforce" />
+        <module name="org.wso2.carbon.identity.provisioning.connector.scim" />
+        <module name="org.wso2.carbon.identity.provisioning.connector.spml" />
+        <module name="org.wso2.carbon.identity.scim.common" />
+        <module name="org.wso2.carbon.identity.scim.common.stub" />
+        <module name="org.wso2.carbon.identity.scim.provider" />
+        <module name="org.wso2.carbon.identity.scim.ui" />
+        <module name="org.wso2.carbon.identity.sso.agent" />
+        <module name="org.wso2.carbon.identity.sso.saml" />
+        <module name="org.wso2.carbon.identity.sso.saml (1)" />
+        <module name="org.wso2.carbon.identity.sso.saml.common" />
+        <module name="org.wso2.carbon.identity.sso.saml.common (1)" />
+        <module name="org.wso2.carbon.identity.sso.saml.stub" />
+        <module name="org.wso2.carbon.identity.sso.saml.ui" />
+        <module name="org.wso2.carbon.identity.sso.saml.ui (1)" />
+        <module name="org.wso2.carbon.identity.sts.mgt" />
+        <module name="org.wso2.carbon.identity.sts.mgt.stub" />
+        <module name="org.wso2.carbon.identity.sts.mgt.ui" />
+        <module name="org.wso2.carbon.identity.sts.passive" />
+        <module name="org.wso2.carbon.identity.sts.passive.stub" />
+        <module name="org.wso2.carbon.identity.sts.passive.ui" />
+        <module name="org.wso2.carbon.identity.sts.store" />
+        <module name="org.wso2.carbon.identity.tools.saml.validator" />
+        <module name="org.wso2.carbon.identity.tools.saml.validator.stub" />
+        <module name="org.wso2.carbon.identity.tools.saml.validator.ui" />
+        <module name="org.wso2.carbon.identity.user.account.association" />
+        <module name="org.wso2.carbon.identity.user.account.association.stub" />
+        <module name="org.wso2.carbon.identity.user.profile" />
+        <module name="org.wso2.carbon.identity.user.profile.stub" />
+        <module name="org.wso2.carbon.identity.user.profile.ui" />
+        <module name="org.wso2.carbon.identity.user.registration" />
+        <module name="org.wso2.carbon.identity.user.registration.stub" />
+        <module name="org.wso2.carbon.identity.user.store.configuration" />
+        <module name="org.wso2.carbon.identity.user.store.configuration.deployer" />
+        <module name="org.wso2.carbon.identity.user.store.configuration.stub" />
+        <module name="org.wso2.carbon.identity.user.store.configuration.ui" />
+        <module name="org.wso2.carbon.identity.user.store.remote" />
+        <module name="org.wso2.carbon.identity.workflow.impl" />
+        <module name="org.wso2.carbon.identity.workflow.impl.stub" />
+        <module name="org.wso2.carbon.identity.workflow.impl.ui" />
+        <module name="org.wso2.carbon.identity.workflow.mgt" />
+        <module name="org.wso2.carbon.identity.workflow.mgt.bps.stub" />
+        <module name="org.wso2.carbon.identity.workflow.mgt.stub" />
+        <module name="org.wso2.carbon.identity.workflow.mgt.ui" />
+        <module name="org.wso2.carbon.identity.workflow.template" />
+        <module name="org.wso2.carbon.idp.mgt" />
+        <module name="org.wso2.carbon.idp.mgt.stub" />
+        <module name="org.wso2.carbon.idp.mgt.ui" />
+        <module name="org.wso2.carbon.ldap.server" />
+        <module name="org.wso2.carbon.policyeditor" />
+        <module name="org.wso2.carbon.policyeditor.ui" />
+        <module name="org.wso2.carbon.security.mgt" />
+        <module name="org.wso2.carbon.security.mgt.stub" />
+        <module name="org.wso2.carbon.security.mgt.ui" />
+        <module name="org.wso2.carbon.sts" />
+        <module name="org.wso2.carbon.sts.stub" />
+        <module name="org.wso2.carbon.sts.ui" />
+        <module name="org.wso2.carbon.um.ws.api" />
+        <module name="org.wso2.carbon.um.ws.api.stub" />
+        <module name="org.wso2.carbon.um.ws.service" />
+        <module name="org.wso2.carbon.user.cassandra" />
+        <module name="org.wso2.carbon.user.mgt" />
+        <module name="org.wso2.carbon.user.mgt.common" />
+        <module name="org.wso2.carbon.user.mgt.stub" />
+        <module name="org.wso2.carbon.user.mgt.ui" />
+        <module name="org.wso2.carbon.user.mgt.workflow" />
+        <module name="org.wso2.carbon.user.mgt.workflow.stub" />
+        <module name="org.wso2.carbon.user.mgt.workflow.ui" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Agent-feature" target="1.7" />
+      <module name="agents" target="1.7" />
+      <module name="application-authenticator-features" target="1.7" />
+      <module name="application-authenticators" target="1.7" />
+      <module name="application-mgt" target="1.7" />
+      <module name="application-mgt-feature" target="1.7" />
+      <module name="authentication-framework" target="1.7" />
+      <module name="authentication-framework-feature" target="1.7" />
+      <module name="basicauth-application-authenticator-feature" target="1.7" />
+      <module name="basicauth-request-path-authenticator-feature" target="1.7" />
+      <module name="carbon-authenticator-features" target="1.7" />
+      <module name="carbon-authenticators" target="1.7" />
+      <module name="carbon-identity" target="1.7" />
+      <module name="carbon-service-stubs" target="1.7" />
+      <module name="claim-mgt" target="1.7" />
+      <module name="claim-mgt-feature" target="1.7" />
+      <module name="custom.wso2.carbon.identity.application.authenticator.persistantId" target="1.7" />
+      <module name="custom.wso2.carbon.identity.inbound" target="1.7" />
+      <module name="directory-server-manager" target="1.7" />
+      <module name="directory-server-manager-feature" target="1.7" />
+      <module name="entitlement" target="1.7" />
+      <module name="feature-categories" target="1.7" />
+      <module name="fido-application-authenticator-feature" target="1.7" />
+      <module name="identity-core" target="1.7" />
+      <module name="identity-core-feature" target="1.7" />
+      <module name="identity-mgt" target="1.7" />
+      <module name="identity-mgt-feature" target="1.7" />
+      <module name="identity-notification-mgt-feature" target="1.7" />
+      <module name="identity-provider-management" target="1.7" />
+      <module name="identity-provider-management-feature" target="1.7" />
+      <module name="identity-workflow-mgt" target="1.7" />
+      <module name="iwa-application-authenticator-feature" target="1.7" />
+      <module name="iwa-authenticator" target="1.7" />
+      <module name="iwa-authenticator-feature" target="1.7" />
+      <module name="mutual-ssl-authenticator" target="1.7" />
+      <module name="mutual-ssl-authenticator-feature" target="1.7" />
+      <module name="notification-mgt" target="1.7" />
+      <module name="oauth" target="1.7" />
+      <module name="oauth-feature" target="1.7" />
+      <module name="oauth-request-path-authenticator-feature" target="1.7" />
+      <module name="oidc-application-authenticator-feature" target="1.7" />
+      <module name="openid" target="1.7" />
+      <module name="openid-application-authenticator-feature" target="1.7" />
+      <module name="openid-feature" target="1.7" />
+      <module name="org.wso2.carbon.claim.mgt" target="1.7" />
+      <module name="org.wso2.carbon.claim.mgt.feature" target="1.7" />
+      <module name="org.wso2.carbon.claim.mgt.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.claim.mgt.stub" target="1.7" />
+      <module name="org.wso2.carbon.claim.mgt.ui" target="1.7" />
+      <module name="org.wso2.carbon.claim.mgt.ui.feature" target="1.7" />
+      <module name="org.wso2.carbon.directory.server.manager" target="1.7" />
+      <module name="org.wso2.carbon.directory.server.manager.common" target="1.7" />
+      <module name="org.wso2.carbon.directory.server.manager.stub" target="1.7" />
+      <module name="org.wso2.carbon.directory.server.manager.ui" target="1.7" />
+      <module name="org.wso2.carbon.directory.service.mgr.feature" target="1.7" />
+      <module name="org.wso2.carbon.directory.service.mgr.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.directory.service.mgr.ui.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.agents.category.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.authentication.endpoint" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.authentication.endpoint.util" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.authentication.framework" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.authentication.framework.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.authenticator.basicauth" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.authenticator.basicauth.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.authenticator.fido" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.authenticator.fido.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.authenticator.iwa" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.authenticator.iwa.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.authenticator.oidc" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.authenticator.oidc.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.authenticator.openid" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.authenticator.openid.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.authenticator.passive.sts" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.authenticator.passive.sts.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.authenticator.requestpath.basicauth" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.authenticator.requestpath.basicauth.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.authenticator.requestpath.oauth" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.authenticator.requestpath.oauth.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.authenticator.samlsso" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.authenticator.samlsso.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.authenticator.social" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.authenticator.social.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.common" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.mgt" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.mgt.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.mgt.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.mgt.stub" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.mgt.ui" target="1.7" />
+      <module name="org.wso2.carbon.identity.application.mgt.ui.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.authenticator.iwa" target="1.7" />
+      <module name="org.wso2.carbon.identity.authenticator.iwa.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.authenticator.iwa.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.authenticator.iwa.stub" target="1.7" />
+      <module name="org.wso2.carbon.identity.authenticator.iwa.ui" target="1.7" />
+      <module name="org.wso2.carbon.identity.authenticator.iwa.ui.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.authenticator.mutualssl" target="1.7" />
+      <module name="org.wso2.carbon.identity.authenticator.mutualssl.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.authenticator.saml2.sso" target="1.7" />
+      <module name="org.wso2.carbon.identity.authenticator.saml2.sso.common" target="1.7" />
+      <module name="org.wso2.carbon.identity.authenticator.saml2.sso.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.authenticator.saml2.sso.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.authenticator.saml2.sso.stub" target="1.7" />
+      <module name="org.wso2.carbon.identity.authenticator.saml2.sso.ui" target="1.7" />
+      <module name="org.wso2.carbon.identity.authenticator.saml2.sso.ui.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.authenticator.signedjwt" target="1.7" />
+      <module name="org.wso2.carbon.identity.authenticator.thrift" target="1.7" />
+      <module name="org.wso2.carbon.identity.authenticator.token.stub" target="1.7" />
+      <module name="org.wso2.carbon.identity.authenticator.webseal.stub" target="1.7" />
+      <module name="org.wso2.carbon.identity.authenticators.category.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.authorization.category.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.base" target="1.7" />
+      <module name="org.wso2.carbon.identity.core" target="1.7" />
+      <module name="org.wso2.carbon.identity.core.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.core.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.core.ui" target="1.7" />
+      <module name="org.wso2.carbon.identity.core.ui.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.entitlement" target="1.7" />
+      <module name="org.wso2.carbon.identity.entitlement.common" target="1.7" />
+      <module name="org.wso2.carbon.identity.entitlement.filter" target="1.7" />
+      <module name="org.wso2.carbon.identity.entitlement.proxy" target="1.7" />
+      <module name="org.wso2.carbon.identity.entitlement.stub" target="1.7" />
+      <module name="org.wso2.carbon.identity.entitlement.ui" target="1.7" />
+      <module name="org.wso2.carbon.identity.inbound.authentication.category.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.inbound.authenticators.category.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.inbound.provisioning.category.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.inbound.provisioning.connectors.category.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.keystore.mgt.category.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.mgt" target="1.7" />
+      <module name="org.wso2.carbon.identity.mgt.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.mgt.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.mgt.stub" target="1.7" />
+      <module name="org.wso2.carbon.identity.mgt.ui" target="1.7" />
+      <module name="org.wso2.carbon.identity.mgt.ui.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.notification.mgt" target="1.7" />
+      <module name="org.wso2.carbon.identity.notification.mgt.category.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.notification.mgt.email" target="1.7" />
+      <module name="org.wso2.carbon.identity.notification.mgt.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.notification.mgt.json" target="1.7" />
+      <module name="org.wso2.carbon.identity.notification.mgt.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.oauth" target="1.7" />
+      <module name="org.wso2.carbon.identity.oauth.common" target="1.7" />
+      <module name="org.wso2.carbon.identity.oauth.common.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.oauth.endpoint" target="1.7" />
+      <module name="org.wso2.carbon.identity.oauth.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.oauth.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.oauth.stub" target="1.7" />
+      <module name="org.wso2.carbon.identity.oauth.ui" target="1.7" />
+      <module name="org.wso2.carbon.identity.oauth.ui.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.outbound.authentication.category.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.outbound.authenticators.category.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.outbound.provisioning.category.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.outbound.provisioning.connectors.category.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.provider" target="1.7" />
+      <module name="org.wso2.carbon.identity.provider.openid.stub" target="1.7" />
+      <module name="org.wso2.carbon.identity.provider.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.provider.stub" target="1.7" />
+      <module name="org.wso2.carbon.identity.provisioning" target="1.7" />
+      <module name="org.wso2.carbon.identity.provisioning.connector.google" target="1.7" />
+      <module name="org.wso2.carbon.identity.provisioning.connector.google.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.provisioning.connector.salesforce" target="1.7" />
+      <module name="org.wso2.carbon.identity.provisioning.connector.salesforce.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.provisioning.connector.scim" target="1.7" />
+      <module name="org.wso2.carbon.identity.provisioning.connector.scim.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.provisioning.connector.spml" target="1.7" />
+      <module name="org.wso2.carbon.identity.provisioning.connector.spml.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.provisioning.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.scim.common" target="1.7" />
+      <module name="org.wso2.carbon.identity.scim.common.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.scim.common.stub" target="1.7" />
+      <module name="org.wso2.carbon.identity.scim.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.scim.provider" target="1.7" />
+      <module name="org.wso2.carbon.identity.scim.provider.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.scim.ui" target="1.7" />
+      <module name="org.wso2.carbon.identity.scim.ui.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.sso.agent" target="1.7" />
+      <module name="org.wso2.carbon.identity.sso.agent.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.sso.saml" target="1.7" />
+      <module name="org.wso2.carbon.identity.sso.saml (1)" target="1.7" />
+      <module name="org.wso2.carbon.identity.sso.saml.common" target="1.7" />
+      <module name="org.wso2.carbon.identity.sso.saml.common (1)" target="1.7" />
+      <module name="org.wso2.carbon.identity.sso.saml.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.sso.saml.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.sso.saml.stub" target="1.7" />
+      <module name="org.wso2.carbon.identity.sso.saml.ui" target="1.7" />
+      <module name="org.wso2.carbon.identity.sso.saml.ui (1)" target="1.7" />
+      <module name="org.wso2.carbon.identity.sso.saml.ui.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.sts.category.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.sts.mgt" target="1.7" />
+      <module name="org.wso2.carbon.identity.sts.mgt.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.sts.mgt.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.sts.mgt.stub" target="1.7" />
+      <module name="org.wso2.carbon.identity.sts.mgt.ui" target="1.7" />
+      <module name="org.wso2.carbon.identity.sts.mgt.ui.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.sts.passive" target="1.7" />
+      <module name="org.wso2.carbon.identity.sts.passive.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.sts.passive.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.sts.passive.stub" target="1.7" />
+      <module name="org.wso2.carbon.identity.sts.passive.ui" target="1.7" />
+      <module name="org.wso2.carbon.identity.sts.passive.ui.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.sts.store" target="1.7" />
+      <module name="org.wso2.carbon.identity.thrift.authentication.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.tools.saml.validator" target="1.7" />
+      <module name="org.wso2.carbon.identity.tools.saml.validator.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.tools.saml.validator.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.tools.saml.validator.stub" target="1.7" />
+      <module name="org.wso2.carbon.identity.tools.saml.validator.ui" target="1.7" />
+      <module name="org.wso2.carbon.identity.tools.saml.validator.ui.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.user.account.association" target="1.7" />
+      <module name="org.wso2.carbon.identity.user.account.association.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.user.account.association.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.user.account.association.stub" target="1.7" />
+      <module name="org.wso2.carbon.identity.user.account.association.ui.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.user.mgt.category.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.user.profile" target="1.7" />
+      <module name="org.wso2.carbon.identity.user.profile.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.user.profile.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.user.profile.stub" target="1.7" />
+      <module name="org.wso2.carbon.identity.user.profile.ui" target="1.7" />
+      <module name="org.wso2.carbon.identity.user.profile.ui.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.user.registration" target="1.7" />
+      <module name="org.wso2.carbon.identity.user.registration.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.user.registration.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.user.registration.stub" target="1.7" />
+      <module name="org.wso2.carbon.identity.user.registration.ui.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.user.store.configuration" target="1.7" />
+      <module name="org.wso2.carbon.identity.user.store.configuration.deployer" target="1.7" />
+      <module name="org.wso2.carbon.identity.user.store.configuration.stub" target="1.7" />
+      <module name="org.wso2.carbon.identity.user.store.configuration.ui" target="1.7" />
+      <module name="org.wso2.carbon.identity.user.store.remote" target="1.7" />
+      <module name="org.wso2.carbon.identity.workflow.category.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.workflow.impl" target="1.7" />
+      <module name="org.wso2.carbon.identity.workflow.impl.stub" target="1.7" />
+      <module name="org.wso2.carbon.identity.workflow.impl.ui" target="1.7" />
+      <module name="org.wso2.carbon.identity.workflow.mgt" target="1.7" />
+      <module name="org.wso2.carbon.identity.workflow.mgt.bps.stub" target="1.7" />
+      <module name="org.wso2.carbon.identity.workflow.mgt.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.workflow.mgt.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.workflow.mgt.stub" target="1.7" />
+      <module name="org.wso2.carbon.identity.workflow.mgt.ui" target="1.7" />
+      <module name="org.wso2.carbon.identity.workflow.mgt.ui.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.workflow.template" target="1.7" />
+      <module name="org.wso2.carbon.identity.xacml.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.xacml.filter.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.xacml.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.identity.xacml.ui.feature" target="1.7" />
+      <module name="org.wso2.carbon.idp.mgt" target="1.7" />
+      <module name="org.wso2.carbon.idp.mgt.feature" target="1.7" />
+      <module name="org.wso2.carbon.idp.mgt.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.idp.mgt.stub" target="1.7" />
+      <module name="org.wso2.carbon.idp.mgt.ui" target="1.7" />
+      <module name="org.wso2.carbon.idp.mgt.ui.feature" target="1.7" />
+      <module name="org.wso2.carbon.ldap.server" target="1.7" />
+      <module name="org.wso2.carbon.ldap.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.ldap.server.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.policyeditor" target="1.7" />
+      <module name="org.wso2.carbon.policyeditor.ui" target="1.7" />
+      <module name="org.wso2.carbon.security.mgt" target="1.7" />
+      <module name="org.wso2.carbon.security.mgt.feature" target="1.7" />
+      <module name="org.wso2.carbon.security.mgt.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.security.mgt.stub" target="1.7" />
+      <module name="org.wso2.carbon.security.mgt.ui" target="1.7" />
+      <module name="org.wso2.carbon.security.mgt.ui.feature" target="1.7" />
+      <module name="org.wso2.carbon.sts" target="1.7" />
+      <module name="org.wso2.carbon.sts.feature" target="1.7" />
+      <module name="org.wso2.carbon.sts.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.sts.stub" target="1.7" />
+      <module name="org.wso2.carbon.sts.ui" target="1.7" />
+      <module name="org.wso2.carbon.sts.ui.feature" target="1.7" />
+      <module name="org.wso2.carbon.um.ws.api" target="1.7" />
+      <module name="org.wso2.carbon.um.ws.api.stub" target="1.7" />
+      <module name="org.wso2.carbon.um.ws.service" target="1.7" />
+      <module name="org.wso2.carbon.um.ws.service.client.feature" target="1.7" />
+      <module name="org.wso2.carbon.um.ws.service.feature" target="1.7" />
+      <module name="org.wso2.carbon.um.ws.service.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.user.cassandra" target="1.7" />
+      <module name="org.wso2.carbon.user.mgt" target="1.7" />
+      <module name="org.wso2.carbon.user.mgt.common" target="1.7" />
+      <module name="org.wso2.carbon.user.mgt.feature" target="1.7" />
+      <module name="org.wso2.carbon.user.mgt.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.user.mgt.stub" target="1.7" />
+      <module name="org.wso2.carbon.user.mgt.ui" target="1.7" />
+      <module name="org.wso2.carbon.user.mgt.ui.feature" target="1.7" />
+      <module name="org.wso2.carbon.user.mgt.workflow" target="1.7" />
+      <module name="org.wso2.carbon.user.mgt.workflow.feature" target="1.7" />
+      <module name="org.wso2.carbon.user.mgt.workflow.server.feature" target="1.7" />
+      <module name="org.wso2.carbon.user.mgt.workflow.stub" target="1.7" />
+      <module name="org.wso2.carbon.user.mgt.workflow.ui" target="1.7" />
+      <module name="org.wso2.carbon.user.mgt.workflow.ui.feature" target="1.7" />
+      <module name="passive-sts-application-authenticator-feature" target="1.7" />
+      <module name="policy-editor" target="1.7" />
+      <module name="provisioning" target="1.7" />
+      <module name="provisioning-feature" target="1.7" />
+      <module name="saml2-sso-authenticator" target="1.7" />
+      <module name="saml2-sso-authenticator-feature" target="1.7" />
+      <module name="samlsso-application-authenticator-feature" target="1.7" />
+      <module name="samlsso-validator" target="1.7" />
+      <module name="scim" target="1.7" />
+      <module name="scim-feature" target="1.7" />
+      <module name="security-mgt" target="1.7" />
+      <module name="security-mgt-feature" target="1.7" />
+      <module name="signedjwt-authenticator" target="1.7" />
+      <module name="social-authenticator-feature" target="1.7" />
+      <module name="sso-saml" target="1.7" />
+      <module name="sso-saml (1)" target="1.7" />
+      <module name="sso-saml-feature" target="1.7" />
+      <module name="sts" target="1.7" />
+      <module name="sts-feature" target="1.7" />
+      <module name="thrift-authenticator" target="1.7" />
+      <module name="thrift-authenticator-feature" target="1.7" />
+      <module name="tools" target="1.7" />
+      <module name="tools-feature" target="1.7" />
+      <module name="user-mgt" target="1.7" />
+      <module name="user-mgt-feature" target="1.7" />
+      <module name="user-store" target="1.7" />
+      <module name="workflow-mgt-feature" target="1.7" />
+      <module name="xacml-feature" target="1.7" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
+

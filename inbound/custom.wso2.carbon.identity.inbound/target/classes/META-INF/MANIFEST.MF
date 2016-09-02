@@ -1,0 +1,52 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1472844934735
+Build-Jdk: 1.7.0_51
+Built-By: nuwandi
+Bundle-Description: WSO2 is an open source application development softw
+ are company focused on providing service-oriented        architecture s
+ olutions for professional developers.
+Bundle-DocURL: http://www.wso2.org/
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-ManifestVersion: 2
+Bundle-Name: custom.wso2.carbon.identity.inbound
+Bundle-SymbolicName: custom.wso2.carbon.identity.inbound
+Bundle-Vendor: WSO2
+Bundle-Version: 5.0.7
+Created-By: Apache Maven Bundle Plugin
+DynamicImport-Package: *
+Export-Package: custom.wso2.carbon.identity.inbound.authenticator;versio
+ n="5.0.7",custom.wso2.carbon.identity.inbound.authenticator.factory;ver
+ sion="5.0.7";uses:="custom.wso2.carbon.identity.inbound.authenticator.m
+ essage,javax.servlet.http,org.wso2.carbon.identity.application.authenti
+ cation.framework.inbound",custom.wso2.carbon.identity.inbound.authentic
+ ator.message;version="5.0.7";uses:="javax.servlet.http,org.wso2.carbon.
+ identity.application.authentication.framework.inbound,org.wso2.carbon.i
+ dentity.application.authentication.framework.model",custom.wso2.carbon.
+ identity.inbound.authenticator.processor;version="5.0.7";uses:="custom.
+ wso2.carbon.identity.inbound.authenticator.util,org.wso2.carbon.identit
+ y.application.authentication.framework.exception,org.wso2.carbon.identi
+ ty.application.authentication.framework.inbound",custom.wso2.carbon.ide
+ ntity.inbound.authenticator.util;version="5.0.7";uses:="javax.crypto,or
+ g.osgi.framework,org.osgi.service.http,org.wso2.carbon.core.util,org.ws
+ o2.carbon.identity.application.common.model,org.wso2.carbon.identity.ap
+ plication.mgt,org.wso2.carbon.registry.core.service,org.wso2.carbon.use
+ r.core.service,org.wso2.carbon.utils"
+Import-Package: custom.wso2.carbon.identity.inbound.authenticator.factor
+ y;version="[5.0,6)",custom.wso2.carbon.identity.inbound.authenticator.p
+ rocessor;version="[5.0,6)",custom.wso2.carbon.identity.inbound.authenti
+ cator.util;version="[5.0,6)",javax.crypto,javax.crypto.spec,javax.servl
+ et.http;version="[2.6,3)",org.apache.commons.codec.binary;version="[1.4
+ ,2)",org.apache.commons.logging;version="[1.1,2)",org.osgi.framework;ve
+ rsion="[1.7,2)",org.osgi.service.component;version="[1.2,2)",org.osgi.s
+ ervice.http;version="[1.2,2)",org.wso2.carbon.core.util;version="[4.4,5
+ )",org.wso2.carbon.identity.application.authentication.framework.except
+ ion;version="[5.0,6)",org.wso2.carbon.identity.application.authenticati
+ on.framework.inbound;version="[5.0,6)",org.wso2.carbon.identity.applica
+ tion.authentication.framework.model;version="[5.0,6)",org.wso2.carbon.i
+ dentity.application.common;version="[5.0,6)",org.wso2.carbon.identity.a
+ pplication.common.model;version="[5.0,6)",org.wso2.carbon.identity.appl
+ ication.mgt;version="[5.0,6)",org.wso2.carbon.registry.core.service;ver
+ sion="[1.0,2)",org.wso2.carbon.user.core.service;version="[4.4,5)",org.
+ wso2.carbon.utils;version="[4.4,5)"
+Service-Component: OSGI-INF/serviceComponents.xml
+Tool: Bnd-2.1.0.20130426-122213

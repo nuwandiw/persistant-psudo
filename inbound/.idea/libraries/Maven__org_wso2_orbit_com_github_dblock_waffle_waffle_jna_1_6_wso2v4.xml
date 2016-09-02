@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.wso2.orbit.com.github.dblock.waffle:waffle-jna:1.6.wso2v4">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/wso2/orbit/com/github/dblock/waffle/waffle-jna/1.6.wso2v4/waffle-jna-1.6.wso2v4.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/wso2/orbit/com/github/dblock/waffle/waffle-jna/1.6.wso2v4/waffle-jna-1.6.wso2v4-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/wso2/orbit/com/github/dblock/waffle/waffle-jna/1.6.wso2v4/waffle-jna-1.6.wso2v4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

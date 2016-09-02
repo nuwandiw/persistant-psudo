@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.openspml:openspml2:192-20100413">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/openspml/openspml2/192-20100413/openspml2-192-20100413.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/openspml/openspml2/192-20100413/openspml2-192-20100413-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/openspml/openspml2/192-20100413/openspml2-192-20100413-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
