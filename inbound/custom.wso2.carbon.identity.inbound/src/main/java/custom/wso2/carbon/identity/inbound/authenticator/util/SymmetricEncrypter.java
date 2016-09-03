@@ -43,7 +43,7 @@ public class SymmetricEncrypter {
                 properties = new Properties();
                 properties.load(fileInputStream);
                 symmetricKey = new SecretKeySpec(properties.getProperty(propertyKey).getBytes(), 0,
-                        properties.getProperty(propertyKey).getBytes().length, ENCRYPTION_ALGO);
+                        32, ENCRYPTION_ALGO); //byte size 32 is to make 256bit
                 return symmetricKey;
             } catch (FileNotFoundException e) {
                 throw new CryptoException("File not found in path :" + SymcorInboundConstants.SYMMETRIC_KEY_FILE_PATH);

@@ -52,7 +52,8 @@ public class SymcorSPCustomAuthenticator extends BasicAuthenticator{
     @Override
     public boolean canHandle(HttpServletRequest request) {
         String SAMLResponse = request.getParameter(SSOConstants.HTTP_POST_PARAM_SAML2_RESP);
-        if (SAMLResponse != null) {
+        String SAMLRequest = request.getParameter(SymcorAuthenticatorConstants.HTTP_PARAM_SAML_NAMEID_REQUEST);
+        if (SAMLResponse != null || SAMLRequest != null) {
             return true;
         } else {
             return super.canHandle(request);
