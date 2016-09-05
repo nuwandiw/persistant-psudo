@@ -6,6 +6,16 @@ import custom.wso2.carbon.identity.inbound.authenticator.util.SymmetricEncrypter
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.joda.time.DateTime;
+import org.opensaml.common.SAMLVersion;
+import org.opensaml.saml2.core.ManageNameIDResponse;
+import org.opensaml.saml2.core.Status;
+import org.opensaml.saml2.core.StatusCode;
+import org.opensaml.saml2.core.StatusMessage;
+import org.opensaml.saml2.core.impl.ManageNameIDResponseBuilder;
+import org.opensaml.saml2.core.impl.StatusBuilder;
+import org.opensaml.saml2.core.impl.StatusCodeBuilder;
+import org.opensaml.saml2.core.impl.StatusMessageBuilder;
 import org.wso2.carbon.core.util.CryptoException;
 import org.wso2.carbon.identity.application.authentication.framework.inbound.HttpIdentityResponse;
 import org.wso2.carbon.identity.application.authentication.framework.inbound.HttpIdentityResponseFactory;
@@ -17,6 +27,9 @@ import org.wso2.carbon.identity.application.common.model.InboundAuthenticationRe
 import org.wso2.carbon.identity.application.common.model.Property;
 import org.wso2.carbon.identity.application.common.model.ServiceProvider;
 import org.wso2.carbon.identity.application.mgt.ApplicationManagementServiceImpl;
+import org.wso2.carbon.identity.base.IdentityException;
+import org.wso2.carbon.identity.sso.saml.SAMLSSOConstants;
+import org.wso2.carbon.identity.sso.saml.util.SAMLSSOUtil;
 
 import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.StandardCharsets;
@@ -45,13 +58,28 @@ public class SymcorInboundIdentityResponseFactory extends HttpIdentityResponseFa
 
         HttpIdentityResponse.HttpIdentityResponseBuilder builder
                 = new HttpIdentityResponse.HttpIdentityResponseBuilder();
-        builder.addParameter(SymcorInboundConstants.PLATFORM_INFO, getPlatformInfo(identityResponse));
-        builder.addParameter(SymcorInboundConstants.USER_TOKEN, getEncryptedToken(identityResponse));
-        builder.addParameter(SymcorInboundConstants.LANGUAGE, getLanguage(identityResponse));
-        builder.setStatusCode(HttpServletResponse.SC_FOUND);
-        builder.setRedirectURL(getRedirectUrl(identityResponse));
-        return builder;
 
+        if (((SymcorInboundResponse) identityResponse).getAuthenticationResult().isAuthenticated()) {
+            if (((SymcorInboundResponse) identityResponse).getRequestId() != null) {
+                String response = buildManageNameIDResponse(identityResponse);
+                builder.addParameter(SymcorInboundConstants.NAME_ID_RESPONSE, response);
+                builder.setStatusCode(HttpServletResponse.SC_FOUND);
+                builder.setRedirectURL(getPropertyValue(identityResponse, SymcorInboundConstants.IDP_URl));
+            } else {
+                builder.addParameter(SymcorInboundConstants.PLATFORM_INFO, getPlatformInfo(identityResponse));
+                builder.addParameter(SymcorInboundConstants.USER_TOKEN, getEncryptedToken(identityResponse));
+                String language = getLanguage(identityResponse);
+                if (language != null) {
+                    builder.addParameter(SymcorInboundConstants.LANGUAGE, language);
+                }
+                builder.setStatusCode(HttpServletResponse.SC_FOUND);
+                builder.setRedirectURL(getRedirectUrl(identityResponse));
+            }
+        } else {
+            builder.setStatusCode(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            builder.setRedirectURL(getPropertyValue(identityResponse, SymcorInboundConstants.IDP_URl));
+        }
+        return builder;
     }
 
     @Override
@@ -78,8 +106,9 @@ public class SymcorInboundIdentityResponseFactory extends HttpIdentityResponseFa
     private String getPropertyValue(IdentityResponse identityResponse, String property) {
         String propertyValue = null;
         String tenantDomain =
-                ((SymcorInboundResponse) identityResponse).getAuthenticationResult().getSubject().getTenantDomain();
-        Property[] props = getInboundAuthenticatorProperty(identityResponse, tenantDomain);
+                ((SymcorInboundResponse) identityResponse).getAuthenticationResult().
+                        getProperty(SymcorInboundConstants.ATTR_SP_TENANT_DOMAIN).toString();
+        Property[] props = getInboundAuthenticatorPropertyArray(identityResponse, tenantDomain);
         for (Property prop : props) {
             if (prop.getName().equals(property)) {
                 propertyValue = prop.getValue();
@@ -89,7 +118,7 @@ public class SymcorInboundIdentityResponseFactory extends HttpIdentityResponseFa
         return propertyValue;
     }
 
-    private Property[] getInboundAuthenticatorProperty(IdentityResponse identityResponse, String tenantDomain) {
+    private Property[] getInboundAuthenticatorPropertyArray(IdentityResponse identityResponse, String tenantDomain) {
         String relyingParty = ((SymcorInboundResponse) identityResponse).getRelyingParty();
         Property[] properties = null;
         try {
@@ -127,25 +156,15 @@ public class SymcorInboundIdentityResponseFactory extends HttpIdentityResponseFa
     }
 
     private String getPlatformInfo(IdentityResponse identityResponse) {
-        String platformInfo = getClaimValue(
+        return getClaimValue(
                 ((SymcorInboundResponse) identityResponse).getAuthenticationResult().getSubject(),
                 SymcorInboundConstants.PLATFORM_INFO_CLAIM);
-        if (platformInfo != null){
-            return platformInfo;
-        } else {
-            return "";
-        }
     }
 
     private String getLanguage(IdentityResponse identityResponse) {
-        String language = getClaimValue(
+        return getClaimValue(
                 ((SymcorInboundResponse) identityResponse).getAuthenticationResult().getSubject(),
                 SymcorInboundConstants.LANGUAGE_CLAIM);
-        if (language != null){
-            return language;
-        } else {
-            return "en";
-        }
     }
 
     private String getEncryptedToken(IdentityResponse identityResponse) {
@@ -158,4 +177,56 @@ public class SymcorInboundIdentityResponseFactory extends HttpIdentityResponseFa
         }
         return Base64.encodeBase64String(encryptedData);
     }
+
+    private String buildManageNameIDResponse (IdentityResponse identityResponse) {
+
+        String manageNameIdResponse = null;
+        try {
+            ManageNameIDResponseBuilder responseBuilder = new ManageNameIDResponseBuilder();
+            ManageNameIDResponse response = responseBuilder.buildObject();
+
+            SymcorInboundResponse symcorInboundResponse = (SymcorInboundResponse) identityResponse;
+
+            response.setID(SAMLSSOUtil.createID());
+            response.setInResponseTo(symcorInboundResponse.getRequestId());
+            response.setDestination(getPropertyValue(identityResponse, SymcorInboundConstants.IDP_URl));
+            response.setVersion(SAMLVersion.VERSION_20);
+
+            DateTime issueInstant = new DateTime();
+            response.setIssueInstant(issueInstant);
+
+            String tenantDomain = ((SymcorInboundResponse) identityResponse).
+                    getAuthenticationResult().getProperty(SymcorInboundConstants.ATTR_SP_TENANT_DOMAIN).toString();
+
+            response.setIssuer(SAMLSSOUtil.getIssuerFromTenantDomain(tenantDomain));
+
+
+            response.setStatus(buildStatus(SAMLSSOConstants.StatusCodes.SUCCESS_CODE, "Request is done successfully"));
+
+            manageNameIdResponse = SAMLSSOUtil.marshall(response);
+        } catch (IdentityException e) {
+           throw new RuntimeException("Error while building ManageNameIDResponse");
+        }
+        return manageNameIdResponse;
+    }
+
+    private Status buildStatus(String status, String statMsg) {
+
+        Status stat = new StatusBuilder().buildObject();
+
+        // Set the status code
+        StatusCode statCode = new StatusCodeBuilder().buildObject();
+        statCode.setValue(status);
+        stat.setStatusCode(statCode);
+
+        // Set the status Message
+        if (statMsg != null) {
+            StatusMessage statMesssage = new StatusMessageBuilder().buildObject();
+            statMesssage.setMessage(statMsg);
+            stat.setStatusMessage(statMesssage);
+        }
+
+        return stat;
+    }
+
 }

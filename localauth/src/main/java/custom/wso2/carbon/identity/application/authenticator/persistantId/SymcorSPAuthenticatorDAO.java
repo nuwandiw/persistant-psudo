@@ -7,9 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- * Created by nuwandi on 8/16/16.
- */
 public class SymcorSPAuthenticatorDAO {
 
     public int getPlatformInfo(String userName) throws SQLException {
@@ -72,6 +69,22 @@ public class SymcorSPAuthenticatorDAO {
             connection.commit();
         } catch (SQLException e) {
             throw new SQLException("Failed to update database with NameID : " + nameID + " for user : " + userName);
+        } finally {
+            IdentityDatabaseUtil.closeAllConnections(connection, null, prepStmt);
+        }
+    }
+
+    public void removeNameID (String nameID) throws SQLException {
+        Connection connection = IdentityDatabaseUtil.getDBConnection();
+        PreparedStatement prepStmt = null;
+        try {
+            prepStmt = connection.prepareStatement(SQLQueries.REMOVE_NAMEID);
+            prepStmt.setString(1, null);
+            prepStmt.setString(2, nameID);
+            prepStmt.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            throw new SQLException("Failed to remove NameID : " + nameID);
         } finally {
             IdentityDatabaseUtil.closeAllConnections(connection, null, prepStmt);
         }

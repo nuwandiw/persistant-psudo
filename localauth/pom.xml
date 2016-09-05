@@ -25,6 +25,10 @@
             <groupId>org.wso2.carbon.identity</groupId>
             <artifactId>org.wso2.carbon.identity.application.authenticator.samlsso</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.identity</groupId>
+            <artifactId>org.wso2.carbon.identity.sso.saml</artifactId>
+        </dependency>
     </dependencies>
 
     <!--<repositories>-->
@@ -90,6 +94,8 @@
                             org.apache.commons.lang; version="${commons-lang.wso2.osgi.version.range}",
                             org.json.*,
                             org.apache.http.*,
+                            org.opensaml.saml2.core.*,
+                            org.opensaml.xml.*,
                             org.osgi.framework; version="${osgi.framework.imp.pkg.version.range}",
                             org.osgi.service.component; version="${osgi.service.component.imp.pkg.version.range}",
 
@@ -109,6 +115,8 @@
                             org.wso2.carbon.idp.mgt.*;
                             version="${carbon.identity.package.import.version.range}",
                             org.wso2.carbon.identity.application.common.*;
+                            version="${carbon.identity.package.import.version.range}",
+                            org.wso2.carbon.identity.sso.saml.*;
                             version="${carbon.identity.package.import.version.range}",
 
                             org.wso2.carbon.user.api; version="${carbon.user.api.imp.pkg.version.range}",
