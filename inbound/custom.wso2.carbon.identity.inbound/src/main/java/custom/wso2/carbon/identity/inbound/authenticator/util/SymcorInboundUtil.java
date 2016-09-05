@@ -56,4 +56,5 @@ public class SymcorInboundUtil {
     public static void setHttpService(HttpService httpService) {
         SymcorInboundUtil.httpService = httpService;
     }
+
 }

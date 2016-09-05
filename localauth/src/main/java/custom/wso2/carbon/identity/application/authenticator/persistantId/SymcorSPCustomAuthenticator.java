@@ -1,5 +1,6 @@
 package custom.wso2.carbon.identity.application.authenticator.persistantId;
 
+import custom.wso2.carbon.identity.application.authenticator.persistantId.util.SymcorAuthenticatorUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -12,6 +13,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.opensaml.saml2.core.ManageNameIDRequest;
 import org.wso2.carbon.identity.application.authentication.framework.AuthenticatorFlowStatus;
 import org.wso2.carbon.identity.application.authentication.framework.config.builder.FileBasedConfigurationBuilder;
 import org.wso2.carbon.identity.application.authentication.framework.config.model.AuthenticatorConfig;
@@ -47,13 +49,12 @@ public class SymcorSPCustomAuthenticator extends BasicAuthenticator{
 
     private static final Log log = LogFactory.getLog(SymcorSPCustomAuthenticator.class);
     private String cmsAuthEndpoint;
-    private String IdpUrl;
+    private String IdpName;
 
     @Override
     public boolean canHandle(HttpServletRequest request) {
-        String SAMLResponse = request.getParameter(SSOConstants.HTTP_POST_PARAM_SAML2_RESP);
-        String SAMLRequest = request.getParameter(SymcorAuthenticatorConstants.HTTP_PARAM_SAML_NAMEID_REQUEST);
-        if (SAMLResponse != null || SAMLRequest != null) {
+        if (request.getParameter(SSOConstants.HTTP_POST_PARAM_SAML2_RESP) != null ||
+                request.getParameter(SymcorAuthenticatorConstants.HTTP_PARAM_SAML_NAMEID_REQUEST) != null) {
             return true;
         } else {
             return super.canHandle(request);
@@ -69,11 +70,11 @@ public class SymcorSPCustomAuthenticator extends BasicAuthenticator{
         }
     }
 
-    private void initIDPUrl() throws AuthenticationFailedException {
-        this.IdpUrl = getAuthenticatorConfig().getParameterMap().get(SymcorAuthenticatorConstants.IDP_URL);
-        if (StringUtils.isBlank(this.IdpUrl)){
-            log.error("IDP URL not configured for the authenticator");
-            throw new AuthenticationFailedException("IDP URL not configured for the authenticator");
+    private void initIDPName() throws AuthenticationFailedException {
+        this.IdpName = getAuthenticatorConfig().getParameterMap().get(SymcorAuthenticatorConstants.IDP_NAME);
+        if (StringUtils.isBlank(this.IdpName)){
+            log.error("IDP Name not configured for the authenticator");
+            throw new AuthenticationFailedException("IDP Name not configured for the authenticator");
         }
     }
 
@@ -82,37 +83,20 @@ public class SymcorSPCustomAuthenticator extends BasicAuthenticator{
                                            HttpServletResponse response, AuthenticationContext context)
             throws AuthenticationFailedException, LogoutFailedException {
 
-        AuthenticatedUser localUser = context.getSubject();
         String SAMLResponse = request.getParameter(SSOConstants.HTTP_POST_PARAM_SAML2_RESP);
-        String localUserID;
-        SymcorSPAuthenticatorDAO dao;
+        String SAMLRequest = request.getParameter(SymcorAuthenticatorConstants.HTTP_PARAM_SAML_NAMEID_REQUEST);
 
         if (canHandle(request)) {
             if (SAMLResponse != null) {
-                Map<String, String> claims = new HashMap<>();
-                String nameID = getNameIDFromSAML(request, context);
-                dao = new SymcorSPAuthenticatorDAO();
-
-                try {
-                    if (localUser != null) { //previously locally authenticated user
-                        localUserID = localUser.getUserName();
-                        dao.linkNameIDToUser(localUserID, nameID);
-                    } else { //saml response for idp authenticated user
-                        localUserID = dao.getUsernameForNameID(nameID);
-                        if (localUserID == null) {
-                            throw new AuthenticationFailedException("No record in SP DB for the NameID : " + nameID);
-                        }
-                    }
-                    claims.put(SymcorAuthenticatorConstants.PLATFORM_INFO_CLAIM,
-                            String.valueOf(dao.getPlatformInfo(localUserID)));
-                    claims.put(SymcorAuthenticatorConstants.LANGUAGE_CLAIM,
-                            request.getParameter(SymcorAuthenticatorConstants.LANGUAGE));
-                    updateContextWithLocalUser(context, localUserID, claims);
-                    return AuthenticatorFlowStatus.SUCCESS_COMPLETED;
-                } catch (SQLException e) {
-                    throw new AuthenticationFailedException(e.getMessage());
-                }
-            } else { //request with username/password
+                //sso authentication flow
+                doAuthentication(request, response, context);
+                return AuthenticatorFlowStatus.SUCCESS_COMPLETED;
+            } else if (SAMLRequest != null) {
+                //user un registration flow
+                doUnregistration(request, response, context);
+                return AuthenticatorFlowStatus.SUCCESS_COMPLETED;
+            }else {
+                //local authentication flow
                 processAuthenticationResponse(request, response, context);
                 return AuthenticatorFlowStatus.INCOMPLETE;
             }
@@ -189,11 +173,11 @@ public class SymcorSPCustomAuthenticator extends BasicAuthenticator{
         return this.cmsAuthEndpoint;
     }
 
-    protected String getIDPUrl() throws AuthenticationFailedException {
-        if (StringUtils.isBlank(IdpUrl)){
-            initIDPUrl();
+    protected String getIDPName() throws AuthenticationFailedException {
+        if (StringUtils.isBlank(IdpName)){
+            initIDPName();
         }
-        return this.IdpUrl;
+        return this.IdpName;
     }
 
     private SAML2SSOManager getSAML2SSOManagerInstance() throws SAMLSSOException {
@@ -264,7 +248,7 @@ public class SymcorSPCustomAuthenticator extends BasicAuthenticator{
         return isAuthenticated;
     }
 
-    private String getNameIDFromSAML (HttpServletRequest request, AuthenticationContext context)
+    private String getNameIDFromSAMLResponse(HttpServletRequest request, AuthenticationContext context)
             throws AuthenticationFailedException {
         String subject = null;
         try {
@@ -282,6 +266,12 @@ public class SymcorSPCustomAuthenticator extends BasicAuthenticator{
         return  subject;
     }
 
+    private String getNameIDFromSAMLRequest(String samlRequest) throws AuthenticationFailedException {
+        String nameID = null;
+        ManageNameIDRequest request = SymcorAuthenticatorUtil.getNameIDRequestObject(samlRequest);
+        nameID = request.getNameID().getValue();
+        return nameID;
+    }
 
     @Override
     public String getContextIdentifier(HttpServletRequest request) {
@@ -306,7 +296,7 @@ public class SymcorSPCustomAuthenticator extends BasicAuthenticator{
     private IdentityProvider getAuthenticatorFederatedIdp(AuthenticationContext context)
             throws AuthenticationFailedException {
 
-        String idp = getIDPUrl();
+        String idp = getIDPName();
         IdentityProvider identityProvider;
         try {
             identityProvider = IdentityProviderManager.getInstance().getIdPByName(idp, context.getTenantDomain());
@@ -327,7 +317,6 @@ public class SymcorSPCustomAuthenticator extends BasicAuthenticator{
                 ssoUrl = idpProperty.getValue();
             }
         }
-
         if (ssoUrl == null) {
             throw new AuthenticationFailedException("No sso url found in the Idp");
         }
@@ -340,6 +329,54 @@ public class SymcorSPCustomAuthenticator extends BasicAuthenticator{
         context.setSubject(user);
     }
 
+    private void doAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationContext context)
+            throws AuthenticationFailedException {
+
+        SymcorSPAuthenticatorDAO dao = new SymcorSPAuthenticatorDAO();
+        Map<String, String> claims = new HashMap<>();
+        String nameID = getNameIDFromSAMLResponse(request, context);
+        String localUserId;
+
+        try {
+            if (context.getSubject() != null) { //if there's a locally authenticated user
+                localUserId = context.getSubject().getUserName();
+                dao.linkNameIDToUser(localUserId, nameID);
+            } else {
+                localUserId = dao.getUsernameForNameID(nameID);
+                if (localUserId == null) {
+                    throw new AuthenticationFailedException("No record in SP DB for the NameID : " + nameID);
+                }
+            }
+            claims.put(SymcorAuthenticatorConstants.PLATFORM_INFO_CLAIM,
+                    String.valueOf(dao.getPlatformInfo(localUserId)));
+            claims.put(SymcorAuthenticatorConstants.LANGUAGE_CLAIM,
+                    request.getParameter(SymcorAuthenticatorConstants.LANGUAGE));
+            updateContextWithLocalUser(context, localUserId, claims);
+        } catch (SQLException e) {
+           throw new AuthenticationFailedException( "Error while authenticating user for NameID : " + nameID);
+        }
+    }
+
+    private void doUnregistration(HttpServletRequest request, HttpServletResponse response, AuthenticationContext context)
+            throws AuthenticationFailedException {
+        SymcorSPAuthenticatorDAO dao = new SymcorSPAuthenticatorDAO();
+        String nameID = getNameIDFromSAMLRequest(
+                request.getParameter(SymcorAuthenticatorConstants.HTTP_PARAM_SAML_NAMEID_REQUEST));
+        String localUserId;
+        try {
+            localUserId = dao.getUsernameForNameID(nameID);
+            if (localUserId != null) {
+                dao.removeNameID(nameID);
+                context.setSubject(AuthenticatedUser.createLocalAuthenticatedUserFromSubjectIdentifier(localUserId));
+            } else {
+                throw new AuthenticationFailedException(
+                        "Unregistration failed. No record in SP DB for the NameID : " + nameID);
+            }
+        } catch (SQLException e) {
+            throw new AuthenticationFailedException("Error while removing NameID : " + nameID);
+        }
+    }
+
     @Override
     public String getFriendlyName() {
         return SymcorAuthenticatorConstants.AUTHENTICATOR_FRIENDLY_NAME;
@@ -348,5 +385,10 @@ public class SymcorSPCustomAuthenticator extends BasicAuthenticator{
     @Override
     public String getName() {
         return SymcorAuthenticatorConstants.AUTHENTICATOR_NAME;
+    }
+
+    @Override
+    protected boolean retryAuthenticationEnabled() {
+        return false;
     }
 }

@@ -53,6 +53,10 @@ From: 'an unknown organization'
 
   - FindBugs-Annotations (http://findbugs.sourceforge.net/) net.sourceforge.findbugs:annotations:jar:1.3.2
     License: GNU Lesser Public License  (http://www.gnu.org/licenses/lgpl.html)
+  - opensaml  opensaml:opensaml:jar:1.1
+
+  - opensaml.wso2 (http://wso2.org) opensaml.wso2:opensaml:bundle:1.1.0.wso2v1
+
   - opensaml2.wso2 (http://wso2.org) opensaml.wso2:opensaml2:bundle:2.4.1.wso2v1
 
   - abdera.wso2 (http://wso2.org) org.apache.abdera.wso2:abdera:bundle:1.0.0.wso2v3
@@ -60,6 +64,10 @@ From: 'an unknown organization'
   - ant.wso2 (http://wso2.org) org.apache.ant.wso2:ant:bundle:1.7.0.wso2v1
 
   - axis2.wso2 (http://wso2.org) org.apache.axis2.wso2:axis2:bundle:1.6.1.wso2v12
+
+  - axis2.client.wso2 (http://wso2.org) org.apache.axis2.wso2:axis2-client:bundle:1.6.1.wso2v12
+
+  - axis2.json.wso2 (http://wso2.org) org.apache.axis2.wso2:axis2-json:bundle:1.6.1.wso2v12
 
   - not-yet-commons-ssl  org.apache.commons.ssl:not-yet-commons-ssl:jar:0.3.9
 
@@ -98,6 +106,8 @@ From: 'an unknown organization'
   - tomcat-util (http://tomcat.apache.org/) org.apache.tomcat:tomcat-util:jar:7.0.59
     License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
   - tomcat jdbc-pool orbit bundle  org.apache.tomcat.wso2:jdbc-pool:bundle:7.0.34.wso2v2
+
+  - woden.wso2 (http://wso2.org) org.apache.woden.wso2:woden:bundle:1.0.0.M8-wso2v1
 
   - axiom.wso2 (http://wso2.org) org.apache.ws.commons.axiom.wso2:axiom:bundle:1.2.11.wso2v9
 
@@ -142,6 +152,10 @@ From: 'an unknown organization'
   - HttpClient (http://www.wso2.com) org.wso2.orbit.org.apache.httpcomponents:httpclient:bundle:4.3.1.wso2v2
 
   - neethi.wso2 (http://wso2.org) org.wso2.orbit.org.apache.neethi:neethi:bundle:2.0.4.wso2v5
+
+  - WSO2 Carbon Orbit - OpenID4Java Library (http://wso2.org) org.wso2.orbit.org.openid4java:openid4java:bundle:1.0.0.wso2v2
+
+  - OWASP Java Encoder (http://www.wso2.com) org.wso2.orbit.org.owasp.encoder:encoder:bundle:1.2.0.wso2v1
 
   - WSO2 Secure Vault  org.wso2.securevault:org.wso2.securevault:bundle:1.0.0-wso2v2
 
@@ -219,6 +233,10 @@ From: 'Apache Software Foundation'
 
   - ant-launcher (http://ant.apache.org/ant-launcher/) org.apache.ant:ant-launcher:jar:1.7.0
 
+
+From: 'Chemouni Uriel' (http://www.minidev.net/)
+  - JSON Small and Fast Parser (http://json-smart/) net.minidev:json-smart:bundle:1.3
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 From: 'Codehaus' (http://codehaus.org)
   - jaxen (http://jaxen.codehaus.org/) jaxen:jaxen:jar:1.1.1
@@ -349,9 +367,17 @@ From: 'WSO2' (http://www.wso2.org/)
     License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
   - WSO2 Identity- Application Management Component (http://wso2.org) org.wso2.carbon.identity:org.wso2.carbon.identity.application.mgt:bundle:5.0.7
     License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - SAML2 SSO Authenticator - Common bundle (http://wso2.org) org.wso2.carbon.identity:org.wso2.carbon.identity.authenticator.saml2.sso.common:bundle:5.0.7
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - WSO2 Carbon - SAML2 SSO Authenticator Stub (http://wso2.org) org.wso2.carbon.identity:org.wso2.carbon.identity.authenticator.saml2.sso.stub:bundle:5.0.7
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
   - WSO2 Carbon - Identity Base (http://www.wso2.com) org.wso2.carbon.identity:org.wso2.carbon.identity.base:bundle:5.0.7
     License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
   - WSO2 Carbon - Identity Core (http://www.wso2.com) org.wso2.carbon.identity:org.wso2.carbon.identity.core:bundle:5.0.7
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - WSO2 Carbon - Identity Provider (http://www.wso2.com) org.wso2.carbon.identity:org.wso2.carbon.identity.provider:bundle:5.0.7
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - WSO2 Carbon - SAML Web Browser SSO (http://www.wso2.com) org.wso2.carbon.identity:org.wso2.carbon.identity.sso.saml:bundle:5.0.7
     License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
   - WSO2 Carbon - User Profile Management (http://www.wso2.com) org.wso2.carbon.identity:org.wso2.carbon.identity.user.profile:bundle:5.0.7
     License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)

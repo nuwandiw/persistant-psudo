@@ -44,11 +44,15 @@ public class SymcorInboundAuthConfig extends AbstractInboundAuthenticatorConfig
         newPlatformUrl.setName("new-platform");
         newPlatformUrl.setDisplayName("CMS URL");
 
+        Property idpUrl = new Property();
+        idpUrl.setName("idp-url");
+        idpUrl.setDisplayName("IDP URL");
+
         Property appType = new Property();
         appType.setName("appType");
         appType.setValue(getConfigName());
         appType.setDisplayName("UI Config Type");
 
-        return new Property[]{oldPlatformUrl, newPlatformUrl, appType};
+        return new Property[]{oldPlatformUrl, newPlatformUrl, idpUrl, appType};
     }
 }

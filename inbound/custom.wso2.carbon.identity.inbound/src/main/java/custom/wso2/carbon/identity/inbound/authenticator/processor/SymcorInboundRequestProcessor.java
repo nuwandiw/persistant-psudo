@@ -32,12 +32,17 @@ public class SymcorInboundRequestProcessor extends IdentityProcessor {
                 new HashMap<String, String>());
 
         if (identityRequest.getParameter("sessionDataKey") != null) {
-            SymcorInboundResponse.SymcorInboundResponseBuilder respBuilder = new SymcorInboundResponse.SymcorInboundResponseBuilder(messageContext);
-            AuthenticationResult authenticationResult = processResponseFromFrameworkLogin(messageContext, identityRequest);
+            SymcorInboundResponse.SymcorInboundResponseBuilder respBuilder =
+                    new SymcorInboundResponse.SymcorInboundResponseBuilder(messageContext);
+            AuthenticationResult authenticationResult =
+                    processResponseFromFrameworkLogin(messageContext, identityRequest);
             respBuilder.setAuthenticationResult(authenticationResult);
-            respBuilder.setLanguage(identityRequest.getParameter(SymcorInboundConstants.LANGUAGE));
             respBuilder.setRelyingParty(getRelyingPartyId());
             respBuilder.setAuthType(getName());
+            String requestId = identityRequest.getParameter(SymcorInboundConstants.HTTP_PARAM_SAML_NAMEID_REQUEST_ID);
+            if (requestId != null) {
+                respBuilder.setRequestId(requestId);
+            }
             return respBuilder;
         } else {
             return buildResponseForFrameworkLogin(messageContext);
