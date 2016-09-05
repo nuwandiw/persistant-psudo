@@ -197,12 +197,9 @@ public class SymcorInboundIdentityResponseFactory extends HttpIdentityResponseFa
 
             String tenantDomain = ((SymcorInboundResponse) identityResponse).
                     getAuthenticationResult().getProperty(SymcorInboundConstants.ATTR_SP_TENANT_DOMAIN).toString();
-
             response.setIssuer(SAMLSSOUtil.getIssuerFromTenantDomain(tenantDomain));
 
-
             response.setStatus(buildStatus(SAMLSSOConstants.StatusCodes.SUCCESS_CODE, "Request is done successfully"));
-
             manageNameIdResponse = SAMLSSOUtil.marshall(response);
         } catch (IdentityException e) {
            throw new RuntimeException("Error while building ManageNameIDResponse");
