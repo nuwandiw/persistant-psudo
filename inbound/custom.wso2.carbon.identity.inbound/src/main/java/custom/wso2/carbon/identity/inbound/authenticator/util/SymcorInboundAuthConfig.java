@@ -36,6 +36,11 @@ public class SymcorInboundAuthConfig extends AbstractInboundAuthenticatorConfig
 
     @Override
     public Property[] getConfigurationProperties() {
+
+        Property returnToUrl = new Property();
+        returnToUrl.setName("symcor-inbound");
+        returnToUrl.setDisplayName("Relying Party");
+
         Property oldPlatformUrl = new Property();
         oldPlatformUrl.setName("old-platform");
         oldPlatformUrl.setDisplayName("WLBX URL");
@@ -53,6 +58,6 @@ public class SymcorInboundAuthConfig extends AbstractInboundAuthenticatorConfig
         appType.setValue(getConfigName());
         appType.setDisplayName("UI Config Type");
 
-        return new Property[]{oldPlatformUrl, newPlatformUrl, idpUrl, appType};
+        return new Property[]{returnToUrl, oldPlatformUrl, newPlatformUrl, idpUrl, appType};
     }
 }
