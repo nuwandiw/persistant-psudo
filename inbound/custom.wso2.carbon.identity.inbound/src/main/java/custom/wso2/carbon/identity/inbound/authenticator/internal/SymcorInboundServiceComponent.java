@@ -2,6 +2,7 @@ package custom.wso2.carbon.identity.inbound.authenticator.internal;
 
 
 import custom.wso2.carbon.identity.inbound.authenticator.factory.SymcorInboundIdentityResponseFactory;
+import custom.wso2.carbon.identity.inbound.authenticator.factory.SymcorInboundRequestFactory;
 import custom.wso2.carbon.identity.inbound.authenticator.processor.SymcorInboundRequestProcessor;
 import custom.wso2.carbon.identity.inbound.authenticator.util.SymcorInboundAuthConfig;
 import custom.wso2.carbon.identity.inbound.authenticator.util.SymcorInboundUtil;
@@ -9,6 +10,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.http.HttpService;
+import org.wso2.carbon.identity.application.authentication.framework.inbound.HttpIdentityRequestFactory;
 import org.wso2.carbon.identity.application.authentication.framework.inbound.HttpIdentityResponseFactory;
 import org.wso2.carbon.identity.application.authentication.framework.inbound.IdentityProcessor;
 import org.wso2.carbon.identity.application.mgt.AbstractInboundAuthenticatorConfig;
@@ -47,6 +49,9 @@ public class SymcorInboundServiceComponent {
 
             ctxt.getBundleContext().registerService(HttpIdentityResponseFactory.class.getName(),
                     new SymcorInboundIdentityResponseFactory(), null);
+
+            ctxt.getBundleContext().registerService(HttpIdentityRequestFactory.class.getName(),
+                    new SymcorInboundRequestFactory(), null);
         } catch (Exception e) {
             log.error("Error Activating Symcor Inbound Auth Package");
             throw new RuntimeException(e);

@@ -45,16 +45,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SymcorSPCustomAuthenticator extends BasicAuthenticator{
+public class SymcorLocalAuthenticator extends BasicAuthenticator{
 
-    private static final Log log = LogFactory.getLog(SymcorSPCustomAuthenticator.class);
+    private static final Log log = LogFactory.getLog(SymcorLocalAuthenticator.class);
     private String cmsAuthEndpoint;
     private String IdpName;
 
     @Override
     public boolean canHandle(HttpServletRequest request) {
-        if (request.getParameter(SSOConstants.HTTP_POST_PARAM_SAML2_RESP) != null ||
-                request.getParameter(SymcorAuthenticatorConstants.HTTP_PARAM_SAML_NAMEID_REQUEST) != null) {
+        if (request.getParameter(SSOConstants.HTTP_POST_PARAM_SAML2_RESP) != null) {
             return true;
         } else {
             return super.canHandle(request);
@@ -84,18 +83,13 @@ public class SymcorSPCustomAuthenticator extends BasicAuthenticator{
             throws AuthenticationFailedException, LogoutFailedException {
 
         String SAMLResponse = request.getParameter(SSOConstants.HTTP_POST_PARAM_SAML2_RESP);
-        String SAMLRequest = request.getParameter(SymcorAuthenticatorConstants.HTTP_PARAM_SAML_NAMEID_REQUEST);
 
         if (canHandle(request)) {
             if (SAMLResponse != null) {
                 //sso authentication flow
                 doAuthentication(request, response, context);
                 return AuthenticatorFlowStatus.SUCCESS_COMPLETED;
-            } else if (SAMLRequest != null) {
-                //user un registration flow
-                doUnregistration(request, response, context);
-                return AuthenticatorFlowStatus.SUCCESS_COMPLETED;
-            }else {
+            } else {
                 //local authentication flow
                 processAuthenticationResponse(request, response, context);
                 return AuthenticatorFlowStatus.INCOMPLETE;
@@ -354,26 +348,6 @@ public class SymcorSPCustomAuthenticator extends BasicAuthenticator{
             updateContextWithLocalUser(context, localUserId, claims);
         } catch (SQLException e) {
            throw new AuthenticationFailedException( "Error while authenticating user for NameID : " + nameID);
-        }
-    }
-
-    private void doUnregistration(HttpServletRequest request, HttpServletResponse response, AuthenticationContext context)
-            throws AuthenticationFailedException {
-        SymcorSPAuthenticatorDAO dao = new SymcorSPAuthenticatorDAO();
-        String nameID = getNameIDFromSAMLRequest(
-                request.getParameter(SymcorAuthenticatorConstants.HTTP_PARAM_SAML_NAMEID_REQUEST));
-        String localUserId;
-        try {
-            localUserId = dao.getUsernameForNameID(nameID);
-            if (localUserId != null) {
-                dao.removeNameID(nameID);
-                context.setSubject(AuthenticatedUser.createLocalAuthenticatedUserFromSubjectIdentifier(localUserId));
-            } else {
-                throw new AuthenticationFailedException(
-                        "Unregistration failed. No record in SP DB for the NameID : " + nameID);
-            }
-        } catch (SQLException e) {
-            throw new AuthenticationFailedException("Error while removing NameID : " + nameID);
         }
     }
 
