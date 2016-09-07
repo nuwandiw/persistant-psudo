@@ -5,6 +5,7 @@ import custom.wso2.carbon.identity.inbound.authenticator.message.SymcorInboundRe
 import custom.wso2.carbon.identity.inbound.authenticator.message.SymcorInboundResponse;
 import custom.wso2.carbon.identity.inbound.authenticator.util.SAMLNameIdUtil;
 import custom.wso2.carbon.identity.inbound.authenticator.util.SymcorInboundAuthConfig;
+import org.apache.commons.lang.StringUtils;
 import org.opensaml.saml2.core.ManageNameIDRequest;
 import org.wso2.carbon.identity.application.authentication.framework.CommonAuthenticationHandler;
 import org.wso2.carbon.identity.application.authentication.framework.cache.AuthenticationRequestCacheEntry;
@@ -21,6 +22,7 @@ import org.wso2.carbon.identity.application.authentication.framework.model.Authe
 import org.wso2.carbon.identity.application.authentication.framework.model.CommonAuthRequestWrapper;
 import org.wso2.carbon.identity.application.authentication.framework.model.CommonAuthResponseWrapper;
 import org.wso2.carbon.identity.application.authentication.framework.util.FrameworkConstants;
+import org.wso2.carbon.identity.core.util.IdentityUtil;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
@@ -35,6 +37,9 @@ import java.util.UUID;
 public class SymcorInboundRequestProcessor extends IdentityProcessor {
 
     private SymcorInboundAuthConfig symcorInboundAuthConfig = null;
+
+    private String relyingParty;
+    private static final String CONTEXT_PATH = "/identity";
 
     public SymcorInboundRequestProcessor(SymcorInboundAuthConfig symcorInboundAuthConfig){
         this.symcorInboundAuthConfig = symcorInboundAuthConfig;
@@ -105,7 +110,7 @@ public class SymcorInboundRequestProcessor extends IdentityProcessor {
         authenticationRequest.setPassiveAuth(false);
         authenticationRequest.setForceAuth(false);
         try {
-            authenticationRequest.setCommonAuthCallerPath(URLEncoder.encode("/identity/symcorAuth",
+            authenticationRequest.setCommonAuthCallerPath(URLEncoder.encode(CONTEXT_PATH,
                     StandardCharsets.UTF_8.name()));
         } catch (UnsupportedEncodingException e) {
             throw FrameworkRuntimeException.error("Error occurred while URL encoding callback path " +
@@ -125,17 +130,29 @@ public class SymcorInboundRequestProcessor extends IdentityProcessor {
 
     @Override
     public String getCallbackPath(IdentityMessageContext identityMessageContext) {
-        return "/identity/symcorAuth"; //TODO check this
+        return IdentityUtil.getServerURL("identity", false, false);
     }
 
     @Override
     public String getRelyingPartyId() {
-        return "symcor";
+        return this.relyingParty;
     }
 
     @Override
     public boolean canHandle(IdentityRequest identityRequest) {
-        return true;
+        if (identityRequest instanceof SymcorInboundRequest) {
+            this.relyingParty = ((SymcorInboundRequest) identityRequest).
+                    getRequest().getParameter(SymcorInboundConstants.SP_ENTITY_ID);
+        } else if (StringUtils.isNotBlank(
+                identityRequest.getParameter(SymcorInboundConstants.SP_ENTITY_ID))){
+            this.relyingParty =
+                    identityRequest.getParameter(SymcorInboundConstants.SP_ENTITY_ID);
+        }
+        if (StringUtils.isNotBlank(this.relyingParty)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

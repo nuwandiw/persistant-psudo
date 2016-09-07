@@ -11,12 +11,13 @@ public class SymcorInboundRequestFactory extends HttpIdentityRequestFactory {
 
     @Override
     public boolean canHandle(HttpServletRequest request, HttpServletResponse response) {
-        if (request.getParameter(SymcorInboundConstants.SAML_RESPONSE) != null ||
-                request.getParameter(SymcorInboundConstants.SP_ENTITY_ID) != null) {
-            return true;
-        } else {
-            return false;
+        boolean canHandleRequest = false;
+        if (request.getParameter(SymcorInboundConstants.SP_ENTITY_ID) != null) {
+            if (request.getParameter(SymcorInboundConstants.HTTP_PARAM_SAML_NAMEID_REQUEST) == null) {
+                canHandleRequest = true;
+            }
         }
+        return canHandleRequest;
     }
 
     @Override
