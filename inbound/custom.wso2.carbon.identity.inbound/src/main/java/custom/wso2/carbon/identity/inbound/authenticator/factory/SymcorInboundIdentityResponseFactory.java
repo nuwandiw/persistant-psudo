@@ -6,6 +6,7 @@ import custom.wso2.carbon.identity.inbound.authenticator.message.SymcorInboundRe
 import custom.wso2.carbon.identity.inbound.authenticator.util.SAMLNameIdUtil;
 import custom.wso2.carbon.identity.inbound.authenticator.util.SymmetricEncrypter;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
@@ -24,7 +25,7 @@ import org.wso2.carbon.identity.application.common.model.ClaimMapping;
 import org.wso2.carbon.identity.application.common.model.InboundAuthenticationRequestConfig;
 import org.wso2.carbon.identity.application.common.model.Property;
 import org.wso2.carbon.identity.application.common.model.ServiceProvider;
-import org.wso2.carbon.identity.application.mgt.ApplicationManagementServiceImpl;
+import org.wso2.carbon.identity.application.mgt.ApplicationManagementService;
 import org.wso2.carbon.identity.base.IdentityException;
 import org.wso2.carbon.identity.sso.saml.SAMLSSOConstants;
 import org.wso2.carbon.identity.sso.saml.util.SAMLSSOUtil;
@@ -33,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -122,37 +124,39 @@ public class SymcorInboundIdentityResponseFactory extends HttpIdentityResponseFa
     private String getPropertyValue(IdentityResponse identityResponse, String property) {
         String propertyValue = null;
         String tenantDomain = ((SymcorInboundResponse) identityResponse).getTenantDomain();
-        Property[] props = getInboundAuthenticatorPropertyArray(identityResponse, tenantDomain);
-        for (Property prop : props) {
-            if (prop.getName().equals(property)) {
+        Map<String, Property> props = getInboundAuthenticatorPropertyArray(identityResponse, tenantDomain);
+        Iterator it = props.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            if(property.equals(pair.getKey())) {
+                Property prop = (Property) pair.getValue();
                 propertyValue = prop.getValue();
-                break;
             }
         }
         return propertyValue;
     }
 
-    private Property[] getInboundAuthenticatorPropertyArray(IdentityResponse identityResponse, String tenantDomain) {
+    private  Map<String, Property> getInboundAuthenticatorPropertyArray(IdentityResponse identityResponse, String tenantDomain) {
         String relyingParty = ((SymcorInboundResponse) identityResponse).getRelyingParty();
-        Property[] properties = null;
+        String authType = ((SymcorInboundResponse) identityResponse).getAuthType();
+        //Property[] properties = null;
         try {
-            ServiceProvider sp =
-                    ApplicationManagementServiceImpl.getInstance().getServiceProvider(relyingParty, tenantDomain);
-            if (sp == null) {
-                throw new RuntimeException("No service provider configuration found for :" + relyingParty);
-            }
-            sp.getInboundAuthenticationConfig().getInboundAuthenticationRequestConfigs();
-            for (InboundAuthenticationRequestConfig config :
-                    sp.getInboundAuthenticationConfig().getInboundAuthenticationRequestConfigs()) {
-                if (config.getInboundAuthType().equals(((SymcorInboundResponse) identityResponse).getAuthType())) {
-                    properties = config.getProperties();
-                    break;
+            ApplicationManagementService appInfo = ApplicationManagementService.getInstance();
+            ServiceProvider application = appInfo.getServiceProviderByClientId(relyingParty,authType , tenantDomain);
+            Map<String, Property> properties = new HashMap();
+            for (InboundAuthenticationRequestConfig authenticationRequestConfig : application
+                    .getInboundAuthenticationConfig().getInboundAuthenticationRequestConfigs()) {
+                if (StringUtils.equals(authenticationRequestConfig.getInboundAuthType(), authType)
+                        && StringUtils.equals(authenticationRequestConfig.getInboundAuthKey(), relyingParty)) {
+                    for(Property property : authenticationRequestConfig.getProperties()){
+                        properties.put(property.getName(), property);
+                    }
                 }
             }
+            return properties;
         } catch (IdentityApplicationManagementException e) {
             throw new RuntimeException("Error while reading inbound authenticator properties");
         }
-        return properties;
     }
 
     private String getRedirectUrl(IdentityResponse identityResponse) {

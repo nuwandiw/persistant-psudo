@@ -4,12 +4,15 @@ import custom.wso2.carbon.identity.application.authenticator.persistantId.util.S
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -196,7 +199,7 @@ public class SymcorLocalAuthenticator extends BasicAuthenticator{
 
     private boolean isAuthenticatedFromCMS(String username, String password)
             throws AuthenticationFailedException {
-
+        //Change this method accordingly to authenticate the users from CMS
         boolean isAuthenticated = false;
         String cmsAuthEndpoint = getCMSEndpoint();
         HttpClient client = HttpClientBuilder.create().build();
@@ -210,13 +213,10 @@ public class SymcorLocalAuthenticator extends BasicAuthenticator{
             post.setHeader(SymcorAuthenticatorConstants.CMSAuthenticator.ACCEPT_HEADER,
                     SymcorAuthenticatorConstants.CMSAuthenticator.HEADER_JSON);
             post.setEntity(new UrlEncodedFormEntity(parameters));
-//            HttpResponse CMSResponse = client.execute(post);
-//
-//            String result = EntityUtils.toString(CMSResponse.getEntity());
+            HttpResponse CMSResponse = client.execute(post);
 
-            //---------------- hard coding result for testing --------------------
-            String result = "[{\"CMS-Web-archive\": {\"AuthenticationResult\": \"passed\"}}]";
-            //--------------------------------------------------------------------
+            String result = EntityUtils.toString(CMSResponse.getEntity());
+
             JSONArray resultArray = new JSONArray(result);
             JSONObject resultObject = resultArray.getJSONObject(0);
 
@@ -230,9 +230,9 @@ public class SymcorLocalAuthenticator extends BasicAuthenticator{
         } catch (UnsupportedEncodingException e) {
             throw new AuthenticationFailedException(e.getMessage());
         }
-//        catch (ClientProtocolException e) {
-//            throw new AuthenticationFailedException(e.getMessage());
-//        }
+        catch (ClientProtocolException e) {
+            throw new AuthenticationFailedException(e.getMessage());
+        }
         catch (IOException e) {
             throw new AuthenticationFailedException(e.getMessage());
         } catch (JSONException e) {
