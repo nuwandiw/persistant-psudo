@@ -3,6 +3,7 @@ package custom.wso2.carbon.identity.application.authenticator.persistantId.handl
 import org.wso2.carbon.identity.application.authentication.framework.config.model.StepConfig;
 import org.wso2.carbon.identity.application.authentication.framework.context.AuthenticationContext;
 import org.wso2.carbon.identity.application.authentication.framework.exception.FrameworkException;
+import org.wso2.carbon.identity.application.authentication.framework.handler.claims.ClaimHandler;
 import org.wso2.carbon.identity.application.authentication.framework.handler.claims.impl.DefaultClaimHandler;
 import org.wso2.carbon.identity.application.authentication.framework.model.AuthenticatedUser;
 import org.wso2.carbon.identity.application.common.model.ClaimMapping;
@@ -12,7 +13,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 
-public class SymcorClaimHandler extends DefaultClaimHandler {
+public class SymcorClaimHandler extends DefaultClaimHandler implements ClaimHandler {
 
     @Override
     protected Map<String, String> handleLocalClaims(String spStandardDialect,

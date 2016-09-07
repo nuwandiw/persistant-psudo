@@ -13,8 +13,8 @@ import org.wso2.carbon.user.core.service.RealmService;
  * interface="org.wso2.carbon.user.core.service.RealmService"cardinality="1..1"
  * policy="dynamic" bind="setRealmService" unbind="unsetRealmService"
  */
-public class SymcorSPCustomAuthenticatoServiceComponent {
-    private static Log log = LogFactory.getLog(SymcorSPCustomAuthenticatoServiceComponent.class);
+public class SymcorLocalAuthenticatorServiceComponent {
+    private static Log log = LogFactory.getLog(SymcorLocalAuthenticatorServiceComponent.class);
 
     private static RealmService realmService;
 
@@ -24,7 +24,7 @@ public class SymcorSPCustomAuthenticatoServiceComponent {
 
     protected void setRealmService(RealmService realmService) {
         log.debug("Setting the Realm Service");
-        SymcorSPCustomAuthenticatoServiceComponent.realmService = realmService;
+        SymcorLocalAuthenticatorServiceComponent.realmService = realmService;
     }
 
     protected void activate(ComponentContext ctxt) {
@@ -47,6 +47,6 @@ public class SymcorSPCustomAuthenticatoServiceComponent {
 
     protected void unsetRealmService(RealmService realmService) {
         log.debug("UnSetting the Realm Service");
-        SymcorSPCustomAuthenticatoServiceComponent.realmService = null;
+        SymcorLocalAuthenticatorServiceComponent.realmService = null;
     }
 }
