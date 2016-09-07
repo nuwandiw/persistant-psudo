@@ -30,6 +30,7 @@ import org.wso2.carbon.identity.sso.saml.SAMLSSOConstants;
 import org.wso2.carbon.identity.sso.saml.util.SAMLSSOUtil;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.Iterator;
@@ -231,9 +232,11 @@ public class SymcorInboundIdentityResponseFactory extends HttpIdentityResponseFa
 
             response.setStatus(SAMLNameIdUtil.buildStatus(
                     SAMLSSOConstants.StatusCodes.SUCCESS_CODE, "Request is done successfully"));
-            manageNameIdResponse = SAMLSSOUtil.marshall(response);
+            manageNameIdResponse = SAMLNameIdUtil.compressResponse(SAMLSSOUtil.marshall(response));
         } catch (IdentityException e) {
            throw new RuntimeException("Error while building ManageNameIDResponse");
+        } catch (IOException e) {
+            throw new RuntimeException("Error while building ManageNameIDResponse");
         }
         return manageNameIdResponse;
     }

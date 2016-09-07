@@ -15,6 +15,12 @@ import org.wso2.carbon.identity.application.authentication.framework.exception.A
 import org.wso2.carbon.identity.base.IdentityException;
 import org.wso2.carbon.identity.sso.saml.util.SAMLSSOUtil;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.zip.Deflater;
+import java.util.zip.DeflaterOutputStream;
+
 public class SAMLNameIdUtil {
 
     public static ManageNameIDRequest getNameIDRequestObject(String samlRequest) throws AuthenticationFailedException {
@@ -56,5 +62,18 @@ public class SAMLNameIdUtil {
     public String getNameIdFromRequest(ManageNameIDRequest nameIDRequest){
         NameID nameId = nameIDRequest.getNameID();
         return nameId.getValue();
+    }
+
+    public static String compressResponse(String response) throws IOException {
+
+        Deflater deflater = new Deflater(Deflater.DEFLATED, true);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        DeflaterOutputStream deflaterOutputStream = new DeflaterOutputStream(byteArrayOutputStream, deflater);
+        try {
+            deflaterOutputStream.write(response.getBytes(StandardCharsets.UTF_8));
+        } finally {
+            deflaterOutputStream.close();
+        }
+        return org.opensaml.xml.util.Base64.encodeBytes(byteArrayOutputStream.toByteArray(), org.opensaml.xml.util.Base64.DONT_BREAK_LINES);
     }
 }
