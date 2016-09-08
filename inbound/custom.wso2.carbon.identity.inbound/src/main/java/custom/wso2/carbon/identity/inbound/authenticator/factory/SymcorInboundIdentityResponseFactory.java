@@ -4,6 +4,7 @@ import custom.wso2.carbon.identity.inbound.authenticator.SymcorInboundConstants;
 import custom.wso2.carbon.identity.inbound.authenticator.dao.SymcorInboundDAO;
 import custom.wso2.carbon.identity.inbound.authenticator.message.SymcorInboundResponse;
 import custom.wso2.carbon.identity.inbound.authenticator.util.SAMLNameIdUtil;
+import custom.wso2.carbon.identity.inbound.authenticator.util.SymcorInboundUtil;
 import custom.wso2.carbon.identity.inbound.authenticator.util.SymmetricEncrypter;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
@@ -196,7 +197,7 @@ public class SymcorInboundIdentityResponseFactory extends HttpIdentityResponseFa
         } catch (CryptoException e) {
             throw new RuntimeException("Error while encrypting userID", e);
         }
-        return Base64.encodeBase64String(encryptedData);
+        return SymcorInboundUtil.newString(Base64.encodeBase64(encryptedData), StandardCharsets.UTF_8);
     }
 
     private void doUnregistration(IdentityResponse response) {

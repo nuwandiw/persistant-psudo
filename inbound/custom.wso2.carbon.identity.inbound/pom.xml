@@ -3,12 +3,6 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <parent>
-        <groupId>org.wso2.carbon.identity</groupId>
-        <artifactId>carbon-identity</artifactId>
-        <version>5.0.7</version>
-        <relativePath>../../../../../src/support/carbon-identity-1/pom.xml</relativePath>
-    </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.wso2.carbon.identity</groupId>
@@ -18,22 +12,133 @@
 
     <dependencies>
         <dependency>
+            <groupId>commons-lang.wso2</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6.0.wso2v1</version>
+        </dependency>
+        <dependency>
             <groupId>org.wso2.carbon.identity</groupId>
-            <artifactId>org.wso2.carbon.identity.application.authentication.framework</artifactId>
+            <artifactId>org.wso2.carbon.identity.application.common</artifactId>
+            <version>5.0.7</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.identity</groupId>
             <artifactId>org.wso2.carbon.identity.sso.saml</artifactId>
+            <version>5.0.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wso2.carbon.identity</groupId>
+            <artifactId>org.wso2.carbon.identity.application.authentication.framework</artifactId>
+            <version>5.0.7</version>
+            <scope>system</scope>
+            <systemPath>${framework.patch.home}/org.wso2.carbon.identity.application.authentication.framework_5.0.7.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.10</version>
+            <groupId>org.wso2.carbon.identity</groupId>
+            <artifactId>org.wso2.carbon.identity.application.mgt</artifactId>
+            <version>5.0.7</version>
+            <scope>system</scope>
+            <systemPath>${framework.patch.home}/org.wso2.carbon.identity.application.mgt_5.0.7.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.identity</groupId>
+            <artifactId>org.wso2.carbon.identity.base</artifactId>
+            <version>5.0.7</version>
+            <scope>system</scope>
+            <systemPath>${framework.patch.home}/org.wso2.carbon.identity.base_5.0.7.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.identity</groupId>
+            <artifactId>org.wso2.carbon.identity.core</artifactId>
+            <version>5.0.7</version>
+            <scope>system</scope>
+            <systemPath>${framework.patch.home}/org.wso2.carbon.identity.core_5.0.7.jar</systemPath>
         </dependency>
     </dependencies>
 
+    <repositories>
+        <!-- Below configuration is used to download the relevant jars and plugins from the remote maven repositories -->
+        <repository>
+            <id>wso2-nexus</id>
+            <name>WSO2 internal Repository</name>
+            <url>http://maven.wso2.org/nexus/content/groups/wso2-public/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+                <checksumPolicy>ignore</checksumPolicy>
+            </releases>
+        </repository>
+
+        <repository>
+            <id>wso2.releases</id>
+            <name>WSO2 internal Repository</name>
+            <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+                <checksumPolicy>ignore</checksumPolicy>
+            </releases>
+        </repository>
+
+        <repository>
+            <id>wso2.snapshots</id>
+            <name>WSO2 Snapshot Repository</name>
+            <url>http://maven.wso2.org/nexus/content/repositories/snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+    </repositories>
+
+    <properties>
+        <!--if you are building the project, give the local path to inbound/custom.wso2.carbon.identity.inbound/src/main/resources/lib -->
+        <!--<framework.patch.home>path to lib</framework.patch.home>-->
+    </properties>
+
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>maven-scr-plugin</artifactId>
+                    <version>1.7.2</version>
+                    <executions>
+                        <execution>
+                            <id>generate-scr-scrdescriptor</id>
+                            <goals>
+                                <goal>scr</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>maven-bundle-plugin</artifactId>
+                    <version>2.4.0</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <obrRepository>NONE</obrRepository>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
         <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.1</version>
+                <inherited>true</inherited>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-scr-plugin</artifactId>
@@ -47,50 +152,39 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Import-Package>
-                            javax.servlet.http; version="${imp.pkg.version.javax.servlet}",
-
-                            org.apache.commons.logging; version="${commons-logging.osgi.version.range}",
-                            org.apache.commons.lang; version="${commons-lang.wso2.osgi.version.range}",
-                            org.json.*,
-                            org.apache.http.*,
+                            javax.crypto,
+                            javax.crypto.spec,
+                            javax.servlet,
+                            javax.servlet.http; version="[2.6.0, 3.0.0)",
+                            org.apache.commons.codec.binary; version="[1.4.0,2.0.0)",
+                            org.apache.commons.logging; version="[1.2,2.0)",
+                            org.apache.commons.lang; version="[2.6.0,3.0.0)",
+                            org.joda.time;version="[2.4.1.wso2v1,3.0.0)",
+                            org.opensaml.common,
                             org.opensaml.saml2.core.*,
-                            org.opensaml.xml.*,
-                            org.osgi.framework; version="${osgi.framework.imp.pkg.version.range}",
-                            org.osgi.service.component; version="${osgi.service.component.imp.pkg.version.range}",
-
-                            org.wso2.carbon.identity.application.authentication.framework.*;
-                            version="${carbon.identity.package.import.version.range}",
-                            org.wso2.carbon.identity.application.authenticator.samlsso.*;
-                            version="${carbon.identity.package.import.version.range}",
-                            org.wso2.carbon.identity.base; version="${carbon.identity.package.import.version.range}",
-                            org.wso2.carbon.identity.application.authenticator.basicauth.*;
-                            version="${carbon.identity.package.import.version.range}",
-                            org.wso2.carbon.identity.user.profile.mgt.*;
-                            version="${carbon.identity.package.import.version.range}",
-                            org.wso2.carbon.identity.core.model;
-                            version="${carbon.identity.package.import.version.range}",
-                            org.wso2.carbon.identity.core.util;
-                            version="${carbon.identity.package.import.version.range}",
-                            org.wso2.carbon.idp.mgt.*;
-                            version="${carbon.identity.package.import.version.range}",
-                            org.wso2.carbon.identity.application.common.*;
-                            version="${carbon.identity.package.import.version.range}",
-                            org.wso2.carbon.identity.sso.saml.*;
-                            version="${carbon.identity.package.import.version.range}",
-
-                            org.wso2.carbon.user.api; version="${carbon.user.api.imp.pkg.version.range}",
-                            org.wso2.carbon.user.core; version="${carbon.kernel.package.import.version.range}",
-                            org.wso2.carbon.user.core.service; version="${carbon.kernel.package.import.version.range}",
-                            org.wso2.carbon.user.core.util; version="${carbon.kernel.package.import.version.range}",
-                            org.wso2.carbon.utils.multitenancy; version="${carbon.kernel.package.import.version.range}"
+                            org.opensaml.xml,
+                            org.opensaml.xml.util,
+                            org.opensaml.xml.validation,
+                            org.osgi.framework; version="[1.7.0, 2.0.0)",
+                            org.osgi.service.component; version="[1.2.0, 2.0.0)",
+                            org.osgi.service.http,
+                            org.wso2.carbon.core.util; version="[4.4.0, 5.0.0)",
+                            org.wso2.carbon.identity.application.authentication.framework.*; version="[5.0.0, 6.0.0)",
+                            org.wso2.carbon.identity.application.common; version="[5.0.0, 6.0.0)",
+                            org.wso2.carbon.identity.application.common.model; version="[5.0.0, 6.0.0)",
+                            org.wso2.carbon.identity.application.mgt; version="[5.0.0, 6.0.0)",
+                            org.wso2.carbon.identity.base; version="[5.0.0, 6.0.0)",
+                            org.wso2.carbon.identity.core.util; version="[5.0.0, 6.0.0)",
+                            org.wso2.carbon.identity.sso.saml.util; version="[5.0.0, 6.0.0)",
+                            org.wso2.carbon.user.core.service; version="[4.4.0, 5.0.0)",
+                            org.wso2.carbon.utils; version="[4.4.0, 5.0.0)",
                         </Import-Package>
                         <Private-Package>custom.wso2.carbon.identity.inbound.authenticator.internal</Private-Package>
                         <Export-Package>
                             !custom.wso2.carbon.identity.inbound.authenticator.internal,
                             custom.wso2.carbon.identity.inbound.authenticator.*;
-                            version="${carbon.identity.package.export.version}",
+                            version="5.0.7",
                         </Export-Package>
-                        <DynamicImport-Package>*</DynamicImport-Package>
                     </instructions>
                 </configuration>
             </plugin>

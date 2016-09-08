@@ -14,7 +14,6 @@ import org.wso2.carbon.identity.application.authentication.framework.inbound.Htt
 import org.wso2.carbon.identity.application.authentication.framework.inbound.HttpIdentityResponseFactory;
 import org.wso2.carbon.identity.application.authentication.framework.inbound.IdentityProcessor;
 import org.wso2.carbon.identity.application.mgt.AbstractInboundAuthenticatorConfig;
-import org.wso2.carbon.registry.core.service.RegistryService;
 import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.utils.ConfigurationContextService;
 
@@ -22,8 +21,6 @@ import java.util.Hashtable;
 
 /**
  * @scr.component name="custom.wso2.carbon.identity.inbound.authenticator.internal" immediate="true"
- * @scr.reference name="registry.service" interface="org.wso2.carbon.registry.core.service.RegistryService"
- * cardinality="1..1" policy="dynamic" bind="setRegistryService" unbind="unsetRegistryService"
  * @scr.reference name="config.context.service" immediate="true"
  * interface="org.wso2.carbon.utils.ConfigurationContextService" cardinality="1..1" policy="dynamic"
  * bind="setConfigurationContextService" unbind="unsetConfigurationContextService"
@@ -66,24 +63,6 @@ public class SymcorInboundServiceComponent {
         }
     }
 
-    protected void setRegistryService(RegistryService registryService) {
-        if (log.isDebugEnabled()) {
-            log.debug("RegistryService set in Symcor inbound authenticator bundle");
-        }
-        try {
-            SymcorInboundUtil.setRegistryService(registryService);
-        } catch (Throwable e) {
-            log.error("Failed to get a reference to the Registry in Symcor inbound authenticator bundle", e);
-        }
-    }
-
-    protected void unsetRegistryService(RegistryService registryService) {
-        if (log.isDebugEnabled()) {
-            log.debug("RegistryService unset in Symcor inbound authenticator bundle");
-        }
-        SymcorInboundUtil.setRegistryService(null);
-    }
-
     protected void setRealmService(RealmService realmService) {
         if (log.isDebugEnabled()) {
             log.debug("Realm Service is set in the Symcor inbound authenticator bundle");
@@ -95,7 +74,7 @@ public class SymcorInboundServiceComponent {
         if (log.isDebugEnabled()) {
             log.debug("Realm Service is set in the Symcor inbound authenticator bundle");
         }
-        SymcorInboundUtil.setRegistryService(null);
+        SymcorInboundUtil.setRealmService(null);
     }
 
     protected void setConfigurationContextService(ConfigurationContextService configCtxService) {
