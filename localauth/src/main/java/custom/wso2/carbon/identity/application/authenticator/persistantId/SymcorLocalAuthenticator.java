@@ -1,6 +1,5 @@
 package custom.wso2.carbon.identity.application.authenticator.persistantId;
 
-import custom.wso2.carbon.identity.application.authenticator.persistantId.util.SymcorAuthenticatorUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -16,7 +15,6 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.opensaml.saml2.core.ManageNameIDRequest;
 import org.wso2.carbon.identity.application.authentication.framework.AuthenticatorFlowStatus;
 import org.wso2.carbon.identity.application.authentication.framework.config.builder.FileBasedConfigurationBuilder;
 import org.wso2.carbon.identity.application.authentication.framework.config.model.AuthenticatorConfig;
@@ -258,13 +256,6 @@ public class SymcorLocalAuthenticator extends BasicAuthenticator{
             throw new AuthenticationFailedException("Error while initiating SAML2SSOManager");
         }
         return  subject;
-    }
-
-    private String getNameIDFromSAMLRequest(String samlRequest) throws AuthenticationFailedException {
-        String nameID = null;
-        ManageNameIDRequest request = SymcorAuthenticatorUtil.getNameIDRequestObject(samlRequest);
-        nameID = request.getNameID().getValue();
-        return nameID;
     }
 
     @Override
