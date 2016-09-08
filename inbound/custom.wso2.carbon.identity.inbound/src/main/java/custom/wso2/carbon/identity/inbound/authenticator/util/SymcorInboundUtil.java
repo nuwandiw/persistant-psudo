@@ -2,21 +2,22 @@ package custom.wso2.carbon.identity.inbound.authenticator.util;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.http.HttpService;
-import org.wso2.carbon.registry.core.service.RegistryService;
 import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.utils.ConfigurationContextService;
 
+import java.nio.charset.Charset;
+
 public class SymcorInboundUtil {
 
-    private static RegistryService registryService;
+    //private static RegistryService registryService;
     private static BundleContext bundleContext;
     private static RealmService realmService;
     private static ConfigurationContextService configCtxService;
     private static HttpService httpService;
 
-    public static RegistryService getRegistryService() {
-        return registryService;
-    }
+//    public static RegistryService getRegistryService() {
+//        return registryService;
+//    }
 
     public static BundleContext getBundleContext() {
         return bundleContext;
@@ -39,10 +40,10 @@ public class SymcorInboundUtil {
 
     }
 
-    public static void setRegistryService(RegistryService registryService) {
-        SymcorInboundUtil.registryService = registryService;
-
-    }
+//    public static void setRegistryService(RegistryService registryService) {
+//        SymcorInboundUtil.registryService = registryService;
+//
+//    }
 
     public static void setRealmService(RealmService realmService) {
         SymcorInboundUtil.realmService = realmService;
@@ -55,6 +56,10 @@ public class SymcorInboundUtil {
 
     public static void setHttpService(HttpService httpService) {
         SymcorInboundUtil.httpService = httpService;
+    }
+
+    public static String newString(final byte[] bytes, final Charset charset) {
+        return bytes == null ? null : new String(bytes, charset);
     }
 
 }
