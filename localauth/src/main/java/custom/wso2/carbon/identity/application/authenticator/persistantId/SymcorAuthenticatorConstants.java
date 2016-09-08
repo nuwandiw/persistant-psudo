@@ -6,7 +6,6 @@ public class SymcorAuthenticatorConstants {
     public static final String CMS_AUTHENTICATION_ENDPOINT = "CMSAuthenticationEndpoint";
     public static final String IDP_NAME = "IDPName";
     public static final String HTTP_PARAM_SAML_NAMEID_REQUEST = "SAMLRequest";
-    public static final String HTTP_PARAM_SAML_NAMEID_REQUEST_ID = "requestId";
 
     public static final int PLATFORM_INFO_WLBX = 1;
     public static final int PLATFORM_INFO_CMS = 0;
