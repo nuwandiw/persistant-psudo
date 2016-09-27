@@ -7,26 +7,20 @@ import javax.servlet.http.HttpServletResponse;
 
 public class SymcorInboundRequest extends IdentityRequest{
 
-    private HttpServletRequest request;
-    private HttpServletResponse response;
+    private String spEntityID;
 
     protected SymcorInboundRequest(IdentityRequestBuilder builder) {
         super(builder);
-        this.request = ((SymcorInboundRequestBuilder) builder).request;
-        this.response = ((SymcorInboundRequestBuilder) builder).response;
+        this.spEntityID = ((SymcorInboundRequestBuilder) builder).spEntityID;
     }
 
-    public HttpServletRequest getRequest() {
-        return request;
-    }
-
-    public HttpServletResponse getResponse() {
-        return response;
+    public String getSpEntityID(){
+        return spEntityID;
     }
 
     public static class SymcorInboundRequestBuilder extends IdentityRequestBuilder{
-        private HttpServletRequest request;
-        private HttpServletResponse response;
+
+        private String spEntityID;
 
         public SymcorInboundRequestBuilder (HttpServletRequest request, HttpServletResponse response) {
             super(request, response);
@@ -37,13 +31,8 @@ public class SymcorInboundRequest extends IdentityRequest{
             return new SymcorInboundRequest(this);
         }
 
-        public SymcorInboundRequestBuilder setRequest(HttpServletRequest request) {
-            this.request = request;
-            return this;
-        }
-
-        public SymcorInboundRequestBuilder setResponse(HttpServletResponse response){
-            this.response = response;
+        public SymcorInboundRequestBuilder setSpEntityID(String spEntityID) {
+            this.spEntityID = spEntityID;
             return this;
         }
     }

@@ -24,8 +24,7 @@ public class SymcorInboundRequestFactory extends HttpIdentityRequestFactory {
     public SymcorInboundRequest.SymcorInboundRequestBuilder create(HttpServletRequest request, HttpServletResponse response){
         SymcorInboundRequest.SymcorInboundRequestBuilder builder =
                 new SymcorInboundRequest.SymcorInboundRequestBuilder(request, response);
-        builder.setRequest(request);
-        builder.setResponse(response);
+        builder.setSpEntityID(request.getParameter(SymcorInboundConstants.SP_ENTITY_ID));
         return builder;
     }
 }

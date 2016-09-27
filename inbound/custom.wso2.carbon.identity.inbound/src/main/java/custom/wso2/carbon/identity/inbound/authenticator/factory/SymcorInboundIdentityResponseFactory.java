@@ -88,7 +88,7 @@ public class SymcorInboundIdentityResponseFactory extends HttpIdentityResponseFa
 
         String response = buildManageNameIDResponse(identityResponse);
         builder.addParameter(SymcorInboundConstants.NAME_ID_RESPONSE, response);
-        builder.setStatusCode(HttpServletResponse.SC_FOUND);
+        builder.setStatusCode(302);
         builder.setRedirectURL(getPropertyValue(identityResponse, SymcorInboundConstants.IDP_URl));
         return builder;
     }
@@ -102,7 +102,7 @@ public class SymcorInboundIdentityResponseFactory extends HttpIdentityResponseFa
         if (language != null) {
             builder.addParameter(SymcorInboundConstants.LANGUAGE, language);
         }
-        builder.setStatusCode(HttpServletResponse.SC_FOUND);
+        builder.setStatusCode(302);
         builder.setRedirectURL(getRedirectUrl(identityResponse));
         return builder;
     }
